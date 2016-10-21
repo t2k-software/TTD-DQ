@@ -28,6 +28,10 @@
   gStyle->SetHistLineColor(1);
   //gStyle->SetPadColor(1);
   gStyle->SetPadColor(kWhite);
+  gStyle->SetPadTickX(1);
+  gStyle->SetPadTickY(1);
+  gStyle->SetPadBottomMargin(0.15);
+  gStyle->SetPadTopMargin(0.11);
   gStyle->SetStatColor(0);
   gStyle->SetStatTextColor(1);
   gStyle->SetTitleColor(1);
@@ -46,7 +50,6 @@
   ifstream myfile("files.list");
 
   while(getline(myfile,line)){ ++nlines; }
-
   TFile *rootfile[nlines];
 
   TString fileName("files.list");
@@ -64,6 +67,20 @@
     rootfile[i] = new TFile(inputString.c_str());
     i++;
   }
+
+  // Read detector information
+  int nRMMs = 0;
+  std::string det = "";
+
+  if (inputString.find("ECAL") != std::string::npos)
+    {nRMMs = 12; det = "ECAL";}
+  else if (inputString.find("P0D") != std::string::npos)
+    {nRMMs = 6; det = "P0D";}
+  else if (inputString.find("SMRD") != std::string::npos)
+    {nRMMs = 4; det = "SMRD";}
+  else
+    std::cout<<"Detector name not found in input file".
+
   //////////////////////////////////////////////////////////////////////
   
   TH2F *base;
@@ -73,90 +90,83 @@
   char hnameOR[50];
   char hfile[50];
   
-  TCanvas c0("c0","--c0--",472,0,800,900);
+  //  TCanvas c0("c0","--c0--",472,0,800,900);
   
-  int rmm;
+  //  int rmm;
   
-  // Loop over the canvas
-  for (int y = 0; y < 4; y++){
+  int canwidth = 800;
+  int canheight = 400;
+  
+  TCanvas c0("c0","--c0--",canwidth,canheight);
+  c0->ToggleEventStatus();
+  c0->Clear();
+  
+  gPad->SetLogz();
+
+  for (int rmm = 0; rmm < nRMMs; rmm++) {
+
+    sprintf(hname,   "GainDriftRMM%d",rmm);      
+    sprintf(hnameOR, "GainDriftAll");
     
-    c0->ToggleEventStatus();
-    c0->Clear();
-    c0->Divide(1,3);
+    cout << "Processing RMM : " << rmm << endl;
+    
+    if ((TFile*)rootfile[0]->GetListOfKeys()->Contains(hname))
+      for(int k = 0; k < nlines; k++) histo[k] = (TH2F*)rootfile[k]->Get(hname);
+    else break;
+    
+    TAxis *xaxismin = histo[0]->GetXaxis();
+    TAxis *xaxismax = histo[nlines-1]->GetXaxis();
+    
+    base = (TH2F*)rootfile[0]->Get(hnameOR);
+    base->SetDirectory(0);
+    base->SetTitle(Form("Gain Drift RMM%i: ADC counts x 100", rmm));
+    
+    base->GetXaxis()->SetTitle("Date GMT");
+    base->GetXaxis()->SetTitleOffset(1.0);
+    base->GetXaxis()->SetTitleSize(0.07);
+    
+    // base->GetYaxis()->SetTitle("ADC counts x 100");
+    base->GetXaxis()->SetLabelSize(0.07);
+    base->GetYaxis()->SetLabelSize(0.07);
+    
+    base->GetXaxis()->SetLimits(xaxismin->GetXmin(),xaxismax->GetXmax());
+    
+    TLine* ul=new TLine(xaxismin->GetXmin(),50.,xaxismax->GetXmax(),50.);
+    TLine* ll=new TLine(xaxismin->GetXmin(),-50.,xaxismax->GetXmax(),-50.);
+    ul->SetLineColor(2);
+    ll->SetLineColor(2);
+    
+    base->Draw("");
+    base->SetMarkerColor(0);
+    
+    for(int k=0;k<nlines;k++){
+      histo[k]->Draw("same colz");
+      histo[k]->GetZaxis()->SetRangeUser(0,5000);
+    }
+    
+    base->GetXaxis().SetTimeFormat("%d\/%m");
+    
+    ul->Draw();
+    ll->Draw();
+    
+    // // Draw Title
+    // TText *t1 = new TText();
+    // t1->SetTextFont(62);
+    // t1->SetTextColor(1); 
+    // t1->SetTextAlign(12);
+    // t1->SetTextSize(0.06);
+    // t1->DrawTextNDC(0.21,0.95,hname);
+    // t1->Draw();
+    
+    // }
+  
+    sprintf(hfile,"gaindriftnew%s_RMM%d.png",det.c_str(),rmm);      
 
-    // Loop over RMMs in each canvas (3 RMMs per canvas)
-    for (int i = 0; i < 3; i++){
-      c0->cd(i+1);
-      gPad->SetLogz();
-
-      rmm = i + (3*y);
-
-      sprintf(hname,   "GainDriftRMM%d",rmm);      
-      sprintf(hnameOR, "GainDriftAll");
-
-      cout << "Processing RMM : " << rmm << endl;
-
-      if ((TFile*)rootfile[0]->GetListOfKeys()->Contains(hname))
-	for(int k = 0; k < nlines; k++) histo[k] = (TH2F*)rootfile[k]->Get(hname);
-      else break;
-
-      TAxis *xaxismin = histo[0]->GetXaxis();
-      TAxis *xaxismax = histo[nlines-1]->GetXaxis();
-
-      base = (TH2F*)rootfile[0]->Get(hnameOR);
-      base->SetDirectory(0);
-      base->SetTitle(Form("Gain Drift RMM%i: ADC counts x 100", rmm));
-
-      base->GetXaxis()->SetTitle("Date GMT");
-      base->GetXaxis()->SetTitleOffset(0.95);
-      base->GetXaxis()->SetTitleSize(0.08);
-
-      // base->GetYaxis()->SetTitle("ADC counts x 100");
-      base->GetXaxis()->SetLabelSize(0.09);
-      base->GetYaxis()->SetLabelSize(0.08);
-
-      base->GetXaxis()->SetLimits(xaxismin->GetXmin(),xaxismax->GetXmax());
-
-      TLine* ul=new TLine(xaxismin->GetXmin(),50.,xaxismax->GetXmax(),50.);
-      TLine* ll=new TLine(xaxismin->GetXmin(),-50.,xaxismax->GetXmax(),-50.);
-      ul->SetLineColor(2);
-      ll->SetLineColor(2);
-
-      base->Draw("");
-      base->SetMarkerColor(0);
-
-      for(int k=0;k<nlines;k++){
-        histo[k]->Draw("same colz");
-        histo[k]->GetZaxis()->SetRangeUser(0,5000);
-      }
-
-      base->GetXaxis().SetTimeFormat("%d\/%m");
-
-      ul->Draw();
-      ll->Draw();
-
-      // // Draw Title
-      // TText *t1 = new TText();
-      // t1->SetTextFont(62);
-      // t1->SetTextColor(1); 
-      // t1->SetTextAlign(12);
-      // t1->SetTextSize(0.06);
-      // t1->DrawTextNDC(0.21,0.95,hname);
-      // t1->Draw();
-
-
-
+    if ((TFile*)rootfile[0]->GetListOfKeys()->Contains(hname)) {NULL;}
+    else break;
+    
+    c0->SaveAs(hfile);    
+    
   }
-
-
-  sprintf(hfile,"gaindriftnew%d.png",y);      
-
-  if ((TFile*)rootfile[0]->GetListOfKeys()->Contains(hname)) {NULL;}
-  else break;
-
-  c0->SaveAs(hfile);
-
-
-  }
-
+  
 }
