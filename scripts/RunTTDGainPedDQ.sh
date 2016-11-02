@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CURDIR=$PWD
+CURDIR=../$PWD
 source /home/t2k/mlawe/t2k/nd280devel/soffTasks/v1r44/cmt/setup.sh
 cd $CURDIR
 
