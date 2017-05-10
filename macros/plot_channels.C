@@ -44,6 +44,21 @@
   // --- Create a new canvas.
   TCanvas c0("c0","--c0--",472,0,700,500);
 
+  std::string inputString = _file0->GetName();
+
+  // Read detector information
+  std::string det = "";
+
+  if (inputString.find("ECAL") != std::string::npos)
+    {det = "ECAL";}
+  else if (inputString.find("P0D") != std::string::npos)
+    {det = "P0D";}
+  else if (inputString.find("SMRD") != std::string::npos)
+    {det = "SMRD";}
+  else
+    std::cout<<"Detector name not found in input file".
+
+
   DeadChGraph.SetTitle("Number of Dead Channels");
   DeadChGraph.GetXaxis().SetTimeDisplay(1);
   DeadChGraph.GetXaxis().SetTimeFormat("%d\/%m");
@@ -55,7 +70,7 @@
   DeadChGraph.GetXaxis().SetTitleSize(0.055);
   DeadChGraph.GetYaxis().SetLabelSize(0.055);
   DeadChGraph.GetYaxis().SetTitleSize(0.0);
-  c0->SaveAs("DeadChannels.png");
+  c0->SaveAs(Form("DeadChannels%s.png",det.c_str()));
 
   BadChGraph.SetTitle("Number of Bad Channels");
   BadChGraph.GetXaxis().SetTimeDisplay(1);
@@ -68,7 +83,7 @@
   BadChGraph.GetXaxis().SetTitleSize(0.055);
   BadChGraph.GetYaxis().SetLabelSize(0.055);
   BadChGraph.GetYaxis().SetTitleSize(0.0);
-  c0->SaveAs("BadChannels.png");
+  c0->SaveAs(Form("BadChannels%s.png",det.c_str()));
 
   OverChGraph.SetTitle("Number of Overflow Channels");
   OverChGraph.GetXaxis().SetTimeDisplay(1);
@@ -81,7 +96,7 @@
   OverChGraph.GetXaxis().SetTitleSize(0.055);
   OverChGraph.GetYaxis().SetLabelSize(0.055);
   OverChGraph.GetYaxis().SetTitleSize(0.0);
-  c0->SaveAs("OverChannels.png");
+  c0->SaveAs(Form("OverChannels%s.png",det.c_str()));
 
   UnderChGraph.SetTitle("Number of Underflow Channels");
   UnderChGraph.GetXaxis().SetTimeDisplay(1);
@@ -94,7 +109,7 @@
   UnderChGraph.GetXaxis().SetTitleSize(0.055);
   UnderChGraph.GetYaxis().SetLabelSize(0.055);
   UnderChGraph.GetYaxis().SetTitleSize(0.0);
-  c0->SaveAs("underChannels.png");
+  c0->SaveAs(Form("underChannels%s.png",det.c_str()));
 
   TotChGraph.SetTitle("Number of Channels scanned");
   TotChGraph.GetXaxis().SetTimeDisplay(1);
@@ -107,5 +122,5 @@
   TotChGraph.GetXaxis().SetTitleSize(0.055);
   TotChGraph.GetYaxis().SetLabelSize(0.055);
   TotChGraph.GetYaxis().SetTitleSize(0.0);
-  c0->SaveAs("totChannels.png");
+  c0->SaveAs(Form("totChannels%s.png",det.c_str()));
 }
