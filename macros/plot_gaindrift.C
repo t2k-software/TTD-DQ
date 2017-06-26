@@ -79,7 +79,7 @@
   else if (inputString.find("SMRD") != std::string::npos)
     {nRMMs = 4; det = "SMRD";}
   else
-    std::cout<<"Detector name not found in input file".
+    std::cout<<"Detector name not found in input file";
 
   //////////////////////////////////////////////////////////////////////
   

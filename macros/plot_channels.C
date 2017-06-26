@@ -37,15 +37,41 @@
   gStyle->SetFuncColor(2);
   gStyle->SetOptStat(00000);  
 
-  // --- Cleanup if this is not the first call to rootlogon.C
-  TGraph *c = 0;
-  c = (TGraph*)gROOT->FindObject("c0"); if (c) c->Delete(); c = 0;
-  p = (TGraph*)gROOT->FindObject("p0"); if (p) p->Delete(); p = 0;
-  // --- Create a new canvas.
-  TCanvas c0("c0","--c0--",472,0,700,500);
+  ///////////////////////////////////////////////////////////////////
 
-  std::string inputString = _file0->GetName();
+  // Read input files
 
+  int nlines = 0;
+  string line;
+  ifstream myfile("files.list");
+
+  while(getline(myfile,line)){ ++nlines; }
+  TFile *rootfile[nlines];
+
+  TString fileName("files.list");
+  ifstream inputFile(fileName.Data(), std::ios::in);
+  
+  if (!inputFile) {
+    std::cerr << "Can not open input file: " << fileName.Data() << endl;
+    return;
+  }  
+
+  std::string inputString;
+  int i = 0;
+  while(inputFile >> inputString) {
+    cout << "Adding file: " << inputString << endl;
+    rootfile[i] = new TFile(inputString.c_str());
+    i++;
+  }
+
+  // // --- Create a new canvas.
+  int canwidth = 800;
+  int canheight = 400;
+  
+  TCanvas c0("c0","--c0--",canwidth,canheight);
+  c0->ToggleEventStatus();
+  c0->Clear();
+  
   // Read detector information
   std::string det = "";
 
@@ -56,8 +82,15 @@
   else if (inputString.find("SMRD") != std::string::npos)
     {det = "SMRD";}
   else
-    std::cout<<"Detector name not found in input file".
+    std::cout<<"Detector name not found in input file";
 
+  ///////////////////////////////////////////////////////////////////
+
+  // TGraph *DeadCh[nlines];
+  
+  // if ((TFile*)rootfile[0]->GetListOfKeys()->Contains("DeadChGraph"))
+  //   for(int k = 0; k < nlines; k++) DeadCh[k] = (TGraph*)rootfile[k]->Get("DeadChGraph");
+  // else break;
 
   DeadChGraph.SetTitle("Number of Dead Channels");
   DeadChGraph.GetXaxis().SetTimeDisplay(1);
