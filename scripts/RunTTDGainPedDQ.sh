@@ -48,7 +48,7 @@ for (( i=first; i<last+1; i++))
 do  
     if [ -d "nd280_000${i}" ]; then
 	echo "Directory Gain/Files/nd280_000${i} already exists, you must have downloaded these files already, perhaps when doing the DQ for another detector."
-	echo "If you wish to download the files again, completely remove the directory nd280_000${i} $PWD."
+	echo "If you wish to download the files again, completely remove the directory nd280_000${i} from $PWD."
     else
 	echo "Working on directory /KEK-T2K/home/dataquality/data/DPT/nd280_000${i}"
 	iget -rV /KEK-T2K/home/dataquality/data/DPT/nd280_000$i .
@@ -57,20 +57,20 @@ done
 
 echo
 
-  # Get reference file if required
+# Get reference file if required
 if [[ ! -z $refrun ]]; then  
     echo "Retrieving reference file"
     mkdir -p ref
     if [ -d "ref/nd280_000${refrun}" ]; then
 	echo "Directory Gain/Files/ref/nd280_000${refrun} already exists, you must have downloaded these files already, perhaps when doing the DQ for another detector."
-        echo "If you wish to download the files again, completely remove the directory nd280_000${refrun} $PWD/ref."
+        echo "If you wish to download the files again, completely remove the directory nd280_000${refrun} from $PWD/ref."
     else
         echo "Working on directory /KEK-T2K/home/dataquality/data/DPT/nd280_000${refrun}"
         iget -rV /KEK-T2K/home/dataquality/data/DPT/nd280_000$refrun ref/.
     fi
 fi
 
-# Remove any empty file, they'll crash the getgainTripT.exe/getpedTripT.exe executables otherwise
+# Remove any empty files, they'll crash the getgainTripT.exe/getpedTripT.exe executables otherwise
 echo "Searching for and removing any empty files, any located will be listed below:"
 find . -size 0 -type f -delete -print
 echo
