@@ -76,7 +76,7 @@
   std::string det = "";
 
   if (inputString.find("ECAL") != std::string::npos)
-    {det = "ECAL";}
+    {det = "ECal";}
   else if (inputString.find("P0D") != std::string::npos)
     {det = "P0D";}
   else if (inputString.find("SMRD") != std::string::npos)

@@ -40,6 +40,9 @@
   // Show functions in red...
   gStyle->SetFuncColor(2);
   gStyle->SetOptStat(00000);  
+  // Colour Palette
+  gStyle->SetNumberContours(255);
+  gStyle->SetPalette(55);
 
   //###############################################################  
 
@@ -73,7 +76,7 @@
   std::string det = "";
 
   if (inputString.find("ECAL") != std::string::npos)
-    {nRMMs = 12; det = "ECAL";}
+    {nRMMs = 12; det = "ECal";}
   else if (inputString.find("P0D") != std::string::npos)
     {nRMMs = 6; det = "P0D";}
   else if (inputString.find("SMRD") != std::string::npos)
@@ -119,7 +122,7 @@
       
     base = (TH2F*)rootfile[0]->Get(hnameLoOR);
     base->SetDirectory(0);
-    base->SetTitle(Form("Low Ped Drift RMM%d: ADC counts x 100", rmm));
+    base->SetTitle(Form("%s Low Ped Drift RMM%d: ADC counts x 100", det.c_str(), rmm));
 
     base->GetXaxis()->SetTitle("Date GMT");
     base->GetXaxis()->SetTitleOffset(1.0);
@@ -174,7 +177,7 @@
     
     base = (TH2F*)rootfile[0]->Get(hnameOR);
     base->SetDirectory(0);
-    base->SetTitle(Form("High Ped Drift RMM%d: ADC counts x 100", rmm));
+    base->SetTitle(Form("%s High Ped Drift RMM%d: ADC counts x 100", det.c_str(), rmm));
 
     base->GetXaxis()->SetTitle("Date GMT");
     base->GetXaxis()->SetTitleOffset(1.0);
