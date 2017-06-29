@@ -16,7 +16,7 @@
   gStyle->SetFrameBorderSize(0);
   gStyle->SetPadBorderSize(1);
   gStyle->SetTitleBorderSize(0);
-  gStyle->SetTitleFontSize(0.05);
+  gStyle->SetTitleFontSize(0.07); // 0.05
 
   // Say it in black and white!
   gStyle->SetAxisColor(1, "xyz");
@@ -92,7 +92,7 @@
   //   for(int k = 0; k < nlines; k++) DeadCh[k] = (TGraph*)rootfile[k]->Get("DeadChGraph");
   // else break;
 
-  DeadChGraph.SetTitle("Number of Dead Channels");
+  DeadChGraph.SetTitle(Form("%s Number of Dead Channels", det.c_str()));
   DeadChGraph.GetXaxis().SetTimeDisplay(1);
   DeadChGraph.GetXaxis().SetTimeFormat("%d\/%m");
   DeadChGraph->Draw("APL");
@@ -105,7 +105,7 @@
   DeadChGraph.GetYaxis().SetTitleSize(0.0);
   c0->SaveAs(Form("DeadChannels%s.png",det.c_str()));
 
-  BadChGraph.SetTitle("Number of Bad Channels");
+  BadChGraph.SetTitle(Form("%s Number of Bad Channels", det.c_str()));
   BadChGraph.GetXaxis().SetTimeDisplay(1);
   BadChGraph.GetXaxis().SetTimeFormat("%d\/%m");
   BadChGraph->Draw("APL");
@@ -118,7 +118,7 @@
   BadChGraph.GetYaxis().SetTitleSize(0.0);
   c0->SaveAs(Form("BadChannels%s.png",det.c_str()));
 
-  OverChGraph.SetTitle("Number of Overflow Channels");
+  OverChGraph.SetTitle(Form("%s Number of Overflow Channels", det.c_str()));
   OverChGraph.GetXaxis().SetTimeDisplay(1);
   OverChGraph.GetXaxis().SetTimeFormat("%d\/%m");
   OverChGraph->Draw("APL");
@@ -131,7 +131,7 @@
   OverChGraph.GetYaxis().SetTitleSize(0.0);
   c0->SaveAs(Form("OverChannels%s.png",det.c_str()));
 
-  UnderChGraph.SetTitle("Number of Underflow Channels");
+  UnderChGraph.SetTitle(Form("%s Number of Underflow Channels", det.c_str()));
   UnderChGraph.GetXaxis().SetTimeDisplay(1);
   UnderChGraph.GetXaxis().SetTimeFormat("%d\/%m");
   UnderChGraph->Draw("APL");
@@ -144,7 +144,7 @@
   UnderChGraph.GetYaxis().SetTitleSize(0.0);
   c0->SaveAs(Form("underChannels%s.png",det.c_str()));
 
-  TotChGraph.SetTitle("Number of Channels scanned");
+  TotChGraph.SetTitle(Form("%s Number of Channels scanned", det.c_str()));
   TotChGraph.GetXaxis().SetTimeDisplay(1);
   TotChGraph.GetXaxis().SetTimeFormat("%d\/%m");
   TotChGraph->Draw("APL");

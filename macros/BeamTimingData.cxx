@@ -25,12 +25,19 @@ BeamTimingData::BeamTimingData(std::string fileList) {
 
   inputString = fRootFiles.at(0)->GetName();
 
-  if (inputString.find("ECAL") != std::string::npos)
+  // if (inputString.find("ECAL") != std::string::npos)
+  //   {fDet = "ECal"; std::copy(minTimeBunchECAL, minTimeBunchECAL+8, minTimeBunch); fnRMMs = nRMM_ECAL;}
+  // else if (inputString.find("P0D") != std::string::npos)
+  //   {fDet = "P0D";  std::copy(minTimeBunchP0D, minTimeBunchP0D+8, minTimeBunch); fnRMMs = nRMM_P0D;}
+  // else if (inputString.find("SMRD") != std::string::npos)
+  //   {fDet = "SMRD"; std::copy(minTimeBunchSMRD, minTimeBunchSMRD+8, minTimeBunch); fnRMMs = nRMM_SMRD;}
+  if (inputString.find("ecal") != std::string::npos)
     {fDet = "ECal"; std::copy(minTimeBunchECAL, minTimeBunchECAL+8, minTimeBunch); fnRMMs = nRMM_ECAL;}
-  else if (inputString.find("P0D") != std::string::npos)
+  else if (inputString.find("p0d") != std::string::npos)
     {fDet = "P0D";  std::copy(minTimeBunchP0D, minTimeBunchP0D+8, minTimeBunch); fnRMMs = nRMM_P0D;}
-  else if (inputString.find("SMRD") != std::string::npos)
+  else if (inputString.find("smrd") != std::string::npos)
     {fDet = "SMRD"; std::copy(minTimeBunchSMRD, minTimeBunchSMRD+8, minTimeBunch); fnRMMs = nRMM_SMRD;}
+
   else {
     std::cout << "Detector name not found in input file" << std::endl;
     return;
@@ -428,7 +435,7 @@ void BeamTimingData::DrawGraphMean(int rmm){
   titleboxsigma->Draw();
 
   if(rmm!=-999)
-    can->SaveAs(Form("%s_bunchtiming_weekly_rmm%02d.png", fDet.c_str(), rmm));
+    can->SaveAs(Form("%s_bunchtiming_weekly_rmm%d.png", fDet.c_str(), rmm));
   else
     can->SaveAs(Form("%s_bunchtiming_weekly_all.png", fDet.c_str()));
   
@@ -479,7 +486,7 @@ void BeamTimingData::DrawGraphSigma(int rmm){
   titleboxsigma->Draw();
   
   if(rmm!=-999)
-    can->SaveAs(Form("%s_bunchwidth_weekly_rmm%02d.png", fDet.c_str(), rmm));
+    can->SaveAs(Form("%s_bunchwidth_weekly_rmm%d.png", fDet.c_str(), rmm));
   else
     can->SaveAs(Form("%s_bunchwidth_weekly_all.png", fDet.c_str()));
   
@@ -516,7 +523,7 @@ void BeamTimingData::DrawGraphSep(int rmm){
   titleboxsigma->Draw();
 
   if(rmm!=-999)
-    can->SaveAs(Form("%s_bunchseparation_weekly_rmm%02d.png", fDet.c_str(), rmm));
+    can->SaveAs(Form("%s_bunchseparation_weekly_rmm%d.png", fDet.c_str(), rmm));
   else
     can->SaveAs(Form("%s_bunchseparation_weekly_all.png", fDet.c_str()));
   
