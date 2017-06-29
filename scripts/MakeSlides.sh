@@ -33,6 +33,7 @@ cat <<EOF > $SLIDESNAME
 \usepackage[T1]      {fontenc}
 \usepackage{amsmath, amsfonts, graphicx}
 \usepackage{bibunits, tikz, version}
+\usepackage{multicol}
 \usetheme[pageofpages=of,% String used between the current page and the
 % total page count.
 alternativetitlepage=true,% Use the fancy title page.
@@ -64,7 +65,9 @@ titlepagelogo=${CURDIR}/images/t2k_logo_medium,% Logo for the first page.
 \maketitle
 
 \begin{frame}{Overview}
-  \tableofcontents
+  \begin{multicols}{2}
+    \tableofcontents
+  \end{multicols}
 \end{frame}
 EOF
 
@@ -88,11 +91,90 @@ for det in ecal p0d smrd; do
 	DET_Title="SMRD Data Quality"
 	let NRMM=4
     fi
-
-# Gain Plots    
+    
+    # Beam Timing Plots (Time)
     cat <<EOF >> $SLIDESNAME
 
 \section{${DET_Title}}
+\subsection{${DET} Bunch Timing}
+\begin{frame}{${Det} Bunch Timing (All RMMs) 1/$((${NRMM}/2+1))}
+  \begin{center}
+    \includegraphics[width=0.6\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/BeamTiming/${det}/${DET_U}_bunchtiming_weekly_all.png}
+    \hspace{0.5cm}
+    \includegraphics[width=0.3\textwidth]{${CURDIR}/images/BunchMeanWidthLegend.png}
+  \end{center}
+\end{frame}
+EOF
+
+    let imax=${NRMM}/2;
+    for ((i=1; i<=$imax; i++)); do
+	cat <<EOF >> $SLIDESNAME
+\begin{frame}{${Det} Bunch Timing (by RMM) $((${i}+1))/$((${NRMM}/2+1))}
+  \begin{center}
+    \includegraphics[width=0.45\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/BeamTiming/${det}/${DET_U}_bunchtiming_weekly_rmm$((${i}*2-2)).png}
+    \hspace{0.5cm}
+    \includegraphics[width=0.45\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/BeamTiming/${det}/${DET_U}_bunchtiming_weekly_rmm$((${i}*2-1)).png}
+  \end{center}
+\end{frame}
+EOF
+    done # Loop over number of slides
+
+    # Beam Timing Plots (Width)
+    cat <<EOF >> $SLIDESNAME
+
+\subsection{${DET} Bunch Width}
+\begin{frame}{${Det} Bunch Width (All RMMs) 1/$((${NRMM}/2+1))}
+  \begin{center}
+    \includegraphics[width=0.6\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/BeamTiming//${det}/${DET_U}_bunchwidth_weekly_all.png}
+    \hspace{0.5cm}
+    \includegraphics[width=0.3\textwidth]{${CURDIR}/images/BunchMeanWidthLegend.png}
+  \end{center}
+\end{frame}
+EOF
+
+    let imax=${NRMM}/2;
+    for ((i=1; i<=$imax; i++)); do
+	cat <<EOF >> $SLIDESNAME
+\begin{frame}{${Det} Bunch Width (by RMM) $((${i}+1))/$((${NRMM}/2+1))}
+  \begin{center}
+    \includegraphics[width=0.45\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/BeamTiming/${det}/${DET_U}_bunchwidth_weekly_rmm$((${i}*2-2)).png}
+    \hspace{0.5cm}
+    \includegraphics[width=0.45\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/BeamTiming/${det}/${DET_U}_bunchwidth_weekly_rmm$((${i}*2-1)).png}
+  \end{center}
+\end{frame}
+EOF
+    done # Loop over number of slides
+
+    # Beam Timing Plots (Separation)
+    cat <<EOF >> $SLIDESNAME
+
+\subsection{${DET} Bunch Separation}
+\begin{frame}{${Det} Bunch Separation (All RMMs) 1/$((${NRMM}/2+1))}
+  \begin{center}
+    \includegraphics[width=0.6\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/BeamTiming/${det}/${DET_U}_bunchseparation_weekly_all.png}
+    \hspace{0.5cm}
+    \includegraphics[width=0.3\textwidth]{${CURDIR}/images/BunchSeparationLegend.png}
+  \end{center}
+\end{frame}
+EOF
+
+    let imax=${NRMM}/2;
+    for ((i=1; i<=$imax; i++)); do
+	cat <<EOF >> $SLIDESNAME
+\begin{frame}{${Det} Bunch Separation (by RMM) $((${i}+1))/$((${NRMM}/2+1))}
+  \begin{center}
+    \includegraphics[width=0.45\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/BeamTiming/${det}/${DET_U}_bunchseparation_weekly_rmm$((${i}*2-2)).png}
+    \hspace{0.5cm}
+    \includegraphics[width=0.45\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/BeamTiming/${det}/${DET_U}_bunchseparation_weekly_rmm$((${i}*2-1)).png}
+  \end{center}
+\end{frame}
+EOF
+    done # Loop over number of slides
+
+
+    # Gain Plots    
+    cat <<EOF >> $SLIDESNAME
+
 \subsection{${DET} Gain Drift}
 EOF
     
@@ -100,7 +182,6 @@ EOF
     if [ $imax -eq 0 ]; then 
 	let imax=1;
     fi
-    let i=1;
     for ((i=1; i<=$imax; i++)); do
 	cat <<EOF >> $SLIDESNAME
 \begin{frame}{${DET} Gain Drift ${i}/${imax}}
@@ -140,7 +221,6 @@ EOF
 	if [ $imax -eq 0 ]; then 
 	    let imax=1;
 	fi
-	let i=1;
 	for ((i=1; i<=$imax; i++)); do
 	    cat <<EOF >> $SLIDESNAME
 \begin{frame}{${DET} Pedestal Drift ${k}/$((${imax}*2))}
