@@ -53,7 +53,8 @@ titlepagelogo=${CURDIR}/images/t2k_logo_medium,% Logo for the first page.
 
 \logo{\includegraphics[height=0.1\paperheight]{${CURDIR}/images/t2k_logo_medium.png}}
 
-%\institute{\includegraphics[scale=0.032]{images/QM_logo.png}}
+\institute{\includegraphics[scale=0.16]{${CURDIR}/images/LU-Logo-PositiveRGBweb.jpg}}
+%\institute{\includegraphics[scale=0.032]{${CURDIR}/images/QM_logo.png}}
 
 \begin{document}
 \maketitle
