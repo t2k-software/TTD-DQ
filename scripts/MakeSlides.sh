@@ -17,13 +17,6 @@ day2=${period:7:2}
 # Make a working directory
 mkdir -p $CURDIR/RunPeriods/$year/$period/Slides
 
-cd $CURDIR/RunPeriods/$year/$period/Slides
-for f in $CURDIR/beamer_style/*sty; do
-    if [ ! -f $(basename $f) ]; then
-	ln -s $f $(basename $f)
-    fi
-done
-
 SLIDESNAME=ttd_dq_slides_$year-$period.tex
 
 # Make slides tex file.
@@ -91,86 +84,52 @@ for det in ecal p0d smrd; do
 	DET_Title="SMRD Data Quality"
 	let NRMM=4
     fi
-    
-    # Beam Timing Plots (Time)
+
+    # Beam Timing Plots
     cat <<EOF >> $SLIDESNAME
 
 \section{${DET_Title}}
-\subsection{${DET} Bunch Timing}
-\begin{frame}{${Det} Bunch Timing (All RMMs) 1/$((${NRMM}/2+1))}
-  \begin{center}
-    \includegraphics[width=0.6\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/BeamTiming/${det}/${DET_U}_bunchtiming_weekly_all.png}
-    \hspace{0.5cm}
-    \includegraphics[width=0.3\textwidth]{${CURDIR}/images/BunchMeanWidthLegend.png}
-  \end{center}
-\end{frame}
 EOF
 
-    let imax=${NRMM}/2;
-    for ((i=1; i<=$imax; i++)); do
+    for plot in timing width separation; do
+
+	if [ $plot = "timing" ]; then
+	    TITLE="Timing"
+	    LEGEND="BunchMeanWidth"
+	elif [ $plot = "width" ]; then
+	    TITLE="Width"
+	    LEGEND="BunchMeanWidth"
+	elif [ $plot = "separation" ]; then
+	    TITLE="Separation"
+	    LEGEND="BunchSeparation"
+	fi
+
+        # Beam Timing Plots
 	cat <<EOF >> $SLIDESNAME
-\begin{frame}{${Det} Bunch Timing (by RMM) $((${i}+1))/$((${NRMM}/2+1))}
-  \begin{center}
-    \includegraphics[width=0.45\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/BeamTiming/${det}/${DET_U}_bunchtiming_weekly_rmm$((${i}*2-2)).png}
-    \hspace{0.5cm}
-    \includegraphics[width=0.45\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/BeamTiming/${det}/${DET_U}_bunchtiming_weekly_rmm$((${i}*2-1)).png}
-  \end{center}
-\end{frame}
-EOF
-    done # Loop over number of slides
 
-    # Beam Timing Plots (Width)
-    cat <<EOF >> $SLIDESNAME
-
-\subsection{${DET} Bunch Width}
-\begin{frame}{${Det} Bunch Width (All RMMs) 1/$((${NRMM}/2+1))}
+\subsection{${DET} Bunch ${TITLE}}
+\begin{frame}{${Det} Bunch ${TITLE} (All RMMs) 1/$((${NRMM}/2+1))}
   \begin{center}
-    \includegraphics[width=0.6\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/BeamTiming//${det}/${DET_U}_bunchwidth_weekly_all.png}
+    \includegraphics[width=0.6\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/BeamTiming/${det}/${DET_U}_bunch${plot}_weekly_all.png}
     \hspace{0.5cm}
-    \includegraphics[width=0.3\textwidth]{${CURDIR}/images/BunchMeanWidthLegend.png}
+    \includegraphics[width=0.3\textwidth]{${CURDIR}/images/${LEGEND}Legend.png}
   \end{center}
 \end{frame}
 EOF
 
-    let imax=${NRMM}/2;
-    for ((i=1; i<=$imax; i++)); do
-	cat <<EOF >> $SLIDESNAME
-\begin{frame}{${Det} Bunch Width (by RMM) $((${i}+1))/$((${NRMM}/2+1))}
+	let imax=${NRMM}/2;
+	for ((i=1; i<=$imax; i++)); do
+	    cat <<EOF >> $SLIDESNAME
+\begin{frame}{${Det} Bunch ${TITLE} (by RMM) $((${i}+1))/$((${NRMM}/2+1))}
   \begin{center}
-    \includegraphics[width=0.45\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/BeamTiming/${det}/${DET_U}_bunchwidth_weekly_rmm$((${i}*2-2)).png}
+    \includegraphics[width=0.45\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/BeamTiming/${det}/${DET_U}_bunch${plot}_weekly_rmm$((${i}*2-2)).png}
     \hspace{0.5cm}
-    \includegraphics[width=0.45\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/BeamTiming/${det}/${DET_U}_bunchwidth_weekly_rmm$((${i}*2-1)).png}
+    \includegraphics[width=0.45\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/BeamTiming/${det}/${DET_U}_bunch${plot}_weekly_rmm$((${i}*2-1)).png}
   \end{center}
 \end{frame}
 EOF
-    done # Loop over number of slides
-
-    # Beam Timing Plots (Separation)
-    cat <<EOF >> $SLIDESNAME
-
-\subsection{${DET} Bunch Separation}
-\begin{frame}{${Det} Bunch Separation (All RMMs) 1/$((${NRMM}/2+1))}
-  \begin{center}
-    \includegraphics[width=0.6\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/BeamTiming/${det}/${DET_U}_bunchseparation_weekly_all.png}
-    \hspace{0.5cm}
-    \includegraphics[width=0.3\textwidth]{${CURDIR}/images/BunchSeparationLegend.png}
-  \end{center}
-\end{frame}
-EOF
-
-    let imax=${NRMM}/2;
-    for ((i=1; i<=$imax; i++)); do
-	cat <<EOF >> $SLIDESNAME
-\begin{frame}{${Det} Bunch Separation (by RMM) $((${i}+1))/$((${NRMM}/2+1))}
-  \begin{center}
-    \includegraphics[width=0.45\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/BeamTiming/${det}/${DET_U}_bunchseparation_weekly_rmm$((${i}*2-2)).png}
-    \hspace{0.5cm}
-    \includegraphics[width=0.45\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/BeamTiming/${det}/${DET_U}_bunchseparation_weekly_rmm$((${i}*2-1)).png}
-  \end{center}
-\end{frame}
-EOF
-    done # Loop over number of slides
-
+	done # Loop over number of slides
+    done
 
     # Gain Plots    
     cat <<EOF >> $SLIDESNAME
@@ -276,6 +235,12 @@ cat <<EOF >> $SLIDESNAME
 \end{document}
 EOF
 
+echo "Slides made, running pdflatex..."
 
+cd $CURDIR/beamer_style
+pdflatex -output-directory $CURDIR/RunPeriods/$year/$period/Slides $CURDIR/RunPeriods/$year/$period/Slides/$SLIDESNAME
+pdflatex -output-directory $CURDIR/RunPeriods/$year/$period/Slides $CURDIR/RunPeriods/$year/$period/Slides/$SLIDESNAME
 
+echo
+echo "Check output slides in" $CURDIR/RunPeriods/$year/$period/Slides
 echo "DONE."
