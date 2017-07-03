@@ -16,6 +16,7 @@ day2=${period:7:2}
 
 # Make a working directory
 mkdir -p $CURDIR/RunPeriods/$year/$period/Slides
+cd $CURDIR/RunPeriods/$year/$period/Slides
 
 SLIDESNAME=ttd_dq_slides_$year-$period.tex
 
