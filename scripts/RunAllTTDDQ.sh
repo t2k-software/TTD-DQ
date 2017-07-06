@@ -1,8 +1,8 @@
 #!/bin/bash
 
-CURDIR=$(dirname $PWD)
+#CURDIR=$(dirname $PWD)
 source /home/t2k/mlawe/t2k/nd280devel/soffTasks/v1r46/cmt/setup.sh
-cd $CURDIR
+#cd $CURDIR
 
 read -p "Enter your name: " author
 echo
@@ -18,7 +18,8 @@ for det in ecal p0d smrd; do
     
     echo "Running Beam Timing DQ for the ${det}"
     
-    $CURDIR/scripts/RunTTDBeamTimingDQ.sh <<EOF
+#    $CURDIR/scripts/RunTTDBeamTimingDQ.sh <<EOF
+    ./RunTTDBeamTimingDQ.sh <<EOF
 ${det}
 ${period}
 ${year}
@@ -34,7 +35,8 @@ EOF
 	* ) echo "Answer not valid, no reference will be used"; refrun="";;
     esac
     
-    $CURDIR/scripts/RunTTDGainPedDQ.sh <<EOF
+#    $CURDIR/scripts/RunTTDGainPedDQ.sh <<EOF
+    ./RunTTDGainPedDQ.sh <<EOF
 ${det}
 ${period}
 ${year}
@@ -48,7 +50,8 @@ done
 
 echo "Making Slides"
 
-$CURDIR/scripts/MakeSlides.sh <<EOF
+#$CURDIR/scripts/MakeSlides.sh <<EOF
+./MakeSlides.sh <<EOF
 ${period}
 ${year}
 ${author}

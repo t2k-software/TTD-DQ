@@ -44,10 +44,10 @@ echo
 cd $CURDIR/RunPeriods/$year/$period/BeamTiming
 
 # Make file lists
-ls -1 $PWD/Files/dq-${det}-b-v00/${det}-b_*.root > $CURDIR/RunPeriods/$year/$period/BeamTiming/$det/files.list
+ls -1 $PWD/Files/dq-${det}-b-v00/dq-${det}-b*.root > $CURDIR/RunPeriods/$year/$period/BeamTiming/$det/files.list
 
   #-------------------------------------------------------------------------------------#
-  # Usage: BeamTimingData.exe -f <file list>                                          #
+  # Usage: BeamTimingData.exe -f <file list>                                            #
   # <detector>:  ECAL/P0D/SMRD                                                          #
   # <file list>: path to the list of root files                                         #
   #-------------------------------------------------------------------------------------#
