@@ -74,9 +74,11 @@
   // Read detector information
   int nRMMs = 0;
   std::string det = "";
+  float ul_val = 0.;
+  float ll_val = 0.;
 
   if (inputString.find("ECAL") != std::string::npos)
-    {nRMMs = 12; det = "ECal";}
+    {nRMMs = 12; det = "ECal"; ul = 50; ll = -50;}
   else if (inputString.find("P0D") != std::string::npos)
     {nRMMs = 6; det = "P0D";}
   else if (inputString.find("SMRD") != std::string::npos)
@@ -134,10 +136,12 @@
     
     base->GetXaxis()->SetLimits(xaxismin->GetXmin(),xaxismax->GetXmax());
     
-    TLine* ul=new TLine(xaxismin->GetXmin(),50.,xaxismax->GetXmax(),50.);
-    TLine* ll=new TLine(xaxismin->GetXmin(),-50.,xaxismax->GetXmax(),-50.);
-    ul->SetLineColor(2);
-    ll->SetLineColor(2);
+    if (int(ll)) {
+      TLine* ul=new TLine(xaxismin->GetXmin(),50.,xaxismax->GetXmax(),ul);
+      TLine* ll=new TLine(xaxismin->GetXmin(),-50.,xaxismax->GetXmax(),ll);
+      ul->SetLineColor(2);
+      ll->SetLineColor(2);
+    }
     
     base->Draw("");
     base->SetMarkerColor(0);
@@ -149,8 +153,9 @@
     
     base->GetXaxis().SetTimeFormat("%d\/%m");
     
-    ul->Draw();
-    ll->Draw();
+    if (int(ll)) {
+      ul->Draw(); ll->Draw();
+    }
     
     // // Draw Title
     // TText *t1 = new TText();
@@ -171,5 +176,15 @@
     c0->SaveAs(hfile);    
     
   }
+
+  base->SetTitle(Form("%s Gain Drift All: ADC counts x 100", det.c_str()));
+  base->Draw("same colz");
+  base->GetZaxis()->SetRangeUser(0,5000);
+
+  if (int(ll)) {
+    ul->Draw(); ll->Draw();
+  }
   
+  sprintf(hfile,"gaindriftnew%s_All.png",det.c_str());
+  c0->SaveAs(hfile);
 }
