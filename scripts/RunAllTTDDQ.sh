@@ -27,7 +27,7 @@ EOF
     
     echo "Running Gain and Pedestal DQ for the ${det}"
     
-    read -p "Do you want to compare gain and peds to a specified reference file for the ecal? (y/n) " useref
+    read -p "Do you want to compare gain and peds to a specified reference file for the ${det}? (y/n) " useref
     
     case $useref in
 	[Yy]* ) read -p "Enter a reference Run: " refrun;;
