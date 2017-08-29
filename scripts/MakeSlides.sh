@@ -155,9 +155,9 @@ EOF
 	fi
 	for ((j=$jmax; j>=1; j--)); do
 	    cat <<EOF >> $SLIDESNAME
-    \includegraphics[width=0.45\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/Gain/${det}/gaindriftnew${DET_U}_RMM$((${i}*2*${jmax}-2*${j})).png}
+    \includegraphics[width=0.45\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/Gain/${det}/gainDriftnew${DET_U}_RMM$((${i}*2*${jmax}-2*${j})).png}
     \hspace{0.5cm}
-    \includegraphics[width=0.45\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/Gain/${det}/gaindriftnew${DET_U}_RMM$((${i}*2*${jmax}-2*${j}+1)).png}
+    \includegraphics[width=0.45\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/Gain/${det}/gainDriftnew${DET_U}_RMM$((${i}*2*${jmax}-2*${j}+1)).png}
     \\
 EOF
 	done # Loop over figures on slide
