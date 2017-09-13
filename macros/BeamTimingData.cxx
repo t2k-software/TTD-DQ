@@ -84,8 +84,8 @@ void BeamTimingData::FillGraphs(int rmm) {
       NameSigma = Form("timingfit_rmm%02d_b%d_Sigma", rmm, iBunch+1);
     }
     else {
-      NameMean  = Form("timingfit_rmm_all_b%d_Mean",  iBunch+1);
-      NameSigma = Form("timingfit_rmm_all_b%d_Sigma", iBunch+1);
+      NameMean  = Form("timingfit_all_b%d_Mean",  iBunch+1);
+      NameSigma = Form("timingfit_all_b%d_Sigma", iBunch+1);
     }
 
     TKey *keyMean  = fRootFiles.at(0)->FindKey(NameMean );
