@@ -18,7 +18,6 @@ else
     echo "Invalid detector name, exiting"; exit
 fi
 
-
 # Make a working directory
 mkdir -p $CURDIR/RunPeriods/$year/$period/BeamTiming/$det $CURDIR/RunPeriods/$year/$period/BeamTiming/Files
 
@@ -48,7 +47,6 @@ ls -1 $PWD/Files/dq-${det}-b-v00/dq-${det}-b*.root > $CURDIR/RunPeriods/$year/$p
 
   #-------------------------------------------------------------------------------------#
   # Usage: BeamTimingData.exe -f <file list>                                            #
-  # <detector>:  ECAL/P0D/SMRD                                                          #
   # <file list>: path to the list of root files                                         #
   #-------------------------------------------------------------------------------------#
  
