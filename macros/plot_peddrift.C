@@ -139,8 +139,8 @@
     base->GetXaxis()->SetLimits(xaxismin->GetXmin(),xaxismax->GetXmax());
     
     if (int(ll_val)) {
-      TLine* ul=new TLine(xaxismin->GetXmin(),50.,xaxismax->GetXmax(),ul_val);
-      TLine* ll=new TLine(xaxismin->GetXmin(),-50.,xaxismax->GetXmax(),ll_val);
+      TLine* ul=new TLine(xaxismin->GetXmin(),ul_val,xaxismax->GetXmax(),ul_val);
+      TLine* ll=new TLine(xaxismin->GetXmin(),ll_val,xaxismax->GetXmax(),ll_val);
       ul->SetLineColor(2);
       ll->SetLineColor(2);
     }
