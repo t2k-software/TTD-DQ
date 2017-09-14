@@ -74,9 +74,11 @@
   // Read detector information
   int nRMMs = 0;
   std::string det = "";
+  float ul_val = 0.;
+  float ll_val = 0.;
 
   if (inputString.find("ECAL") != std::string::npos)
-    {nRMMs = 12; det = "ECal";}
+    {nRMMs = 12; det = "ECal"; ul_val = 50; ll_val = -50;}
   else if (inputString.find("P0D") != std::string::npos)
     {nRMMs = 6; det = "P0D";}
   else if (inputString.find("SMRD") != std::string::npos)
@@ -136,10 +138,12 @@
     
     base->GetXaxis()->SetLimits(xaxismin->GetXmin(),xaxismax->GetXmax());
     
-    TLine* ul=new TLine(xaxismin->GetXmin(),50.,xaxismax->GetXmax(),50.);
-    TLine* ll=new TLine(xaxismin->GetXmin(),-50.,xaxismax->GetXmax(),-50.);
-    ul->SetLineColor(2);
-    ll->SetLineColor(2);
+    if (int(ll_val)) {
+      TLine* ul=new TLine(xaxismin->GetXmin(),50.,xaxismax->GetXmax(),ul_val);
+      TLine* ll=new TLine(xaxismin->GetXmin(),-50.,xaxismax->GetXmax(),ll_val);
+      ul->SetLineColor(2);
+      ll->SetLineColor(2);
+    }
     
     base->Draw("");
     base->SetMarkerColor(0);
@@ -151,21 +155,14 @@
     
     base->GetXaxis().SetTimeFormat("%d\/%m");
     
-    ul->Draw();
-    ll->Draw();
-    
-    // TText *t1 = new TText();
-    // t1->SetTextFont(62);
-    // t1->SetTextColor(1);   
-    // t1->SetTextAlign(12);
-    // t1->SetTextSize(0.06);
-    // t1->DrawTextNDC(0.21,0.95,hnameLo);
-    // t1->Draw();
+    if (int(ll_val)) {
+      ul->Draw(); ll->Draw();
+    }
 
     if ((TFile*)rootfile[0]->GetListOfKeys()->Contains(hname)) {NULL;}
     else break;
 
-    sprintf(file,"peddriftlownew%s_RMM%d.png",det.c_str(),rmm);      
+    sprintf(file,"peddriftLownew%s_RMM%d.png",det.c_str(),rmm);      
 
     c0->SaveAs(file);
 
@@ -191,11 +188,6 @@
     
     base->GetXaxis()->SetLimits(xaxismin->GetXmin(),xaxismax->GetXmax());
     
-    TLine* ul=new TLine(xaxismin->GetXmin(),50.,xaxismax->GetXmax(),50.);
-    TLine* ll=new TLine(xaxismin->GetXmin(),-50.,xaxismax->GetXmax(),-50.);
-    ul->SetLineColor(2);
-    ll->SetLineColor(2);
-    
     base->Draw("");
     base->SetMarkerColor(0);
     
@@ -206,21 +198,14 @@
     
     base->GetXaxis().SetTimeFormat("%d\/%m");
     
-    ul->Draw();
-    ll->Draw();
-    
-    // TText *t1 = new TText();
-    // t1->SetTextFont(62);
-    // t1->SetTextColor(1); 
-    // t1->SetTextAlign(12);
-    // t1->SetTextSize(0.06);
-    // t1->DrawTextNDC(0.21,0.95,hname);
-    // t1->Draw();
+    if (int(ll_val)) {
+      ul->Draw(); ll->Draw();
+    }
     
     if ((TFile*)rootfile[0]->GetListOfKeys()->Contains(hname)) {NULL;}
     else break;
 
-    sprintf(file,"peddrifthighnew%s_RMM%d.png",det.c_str(),rmm);      
+    sprintf(file,"peddriftHighnew%s_RMM%d.png",det.c_str(),rmm);      
 
     c0->SaveAs(file);
  
