@@ -110,7 +110,7 @@ EOF
 	cat <<EOF >> $SLIDESNAME
 
 \subsection{${DET} Bunch ${TITLE}}
-\begin{frame}{${Det} Bunch ${TITLE} (All RMMs) 1/$((${NRMM}/2+1))}
+\begin{frame}{${DET} Bunch ${TITLE} (All RMMs) 1/$((${NRMM}/2+1))}
   \begin{center}
     \includegraphics[width=0.6\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/BeamTiming/${det}/${DET_U}_bunch${plot}_weekly_all.png}
     \hspace{0.5cm}
@@ -122,7 +122,7 @@ EOF
 	let imax=${NRMM}/2;
 	for ((i=1; i<=$imax; i++)); do
 	    cat <<EOF >> $SLIDESNAME
-\begin{frame}{${Det} Bunch ${TITLE} (by RMM) $((${i}+1))/$((${NRMM}/2+1))}
+\begin{frame}{${DET} Bunch ${TITLE} (by RMM) $((${i}+1))/$((${NRMM}/2+1))}
   \begin{center}
     \includegraphics[width=0.45\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/BeamTiming/${det}/${DET_U}_bunch${plot}_weekly_rmm$((${i}*2-2)).png}
     \hspace{0.5cm}
@@ -134,18 +134,27 @@ EOF
     done
 
     # Gain Plots    
-    cat <<EOF >> $SLIDESNAME
-
-\subsection{${DET} Gain Drift}
-EOF
     
     let imax=${NRMM}/6;
     if [ $imax -eq 0 ]; then 
 	let imax=1;
     fi
+    
+    cat <<EOF >> $SLIDESNAME
+
+\subsection{${DET} Gain Drift}
+\begin{frame}{${DET} Gain Drift (All RMMs) 1/$((${imax}+1))}
+  \begin{center}
+    \includegraphics[width=0.68\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/Gain/${det}/gainnew${DET_U}_All.png}
+    \\
+    \includegraphics[width=0.68\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/Gain/${det}/gainDriftnew${DET_U}_All.png}
+  \end{center}
+\end{frame}
+EOF
+    
     for ((i=1; i<=$imax; i++)); do
 	cat <<EOF >> $SLIDESNAME
-\begin{frame}{${DET} Gain Drift ${i}/${imax}}
+\begin{frame}{${DET} Gain Drift (by RMM) $((${i}+1))/$((${imax}+1))}
   \begin{center}
 EOF
 	if [ $det = "smrd" ]; then
@@ -176,7 +185,7 @@ EOF
 EOF
     
     let k=1
-    for gain in low high; do
+    for gain in Low High; do
 	
 	let imax=${NRMM}/6;
 	if [ $imax -eq 0 ]; then 
@@ -184,7 +193,7 @@ EOF
 	fi
 	for ((i=1; i<=$imax; i++)); do
 	    cat <<EOF >> $SLIDESNAME
-\begin{frame}{${DET} Pedestal Drift ${k}/$((${imax}*2))}
+\begin{frame}{${DET} Pedestal Drift (${gain} Gain by RMM) ${k}/$((${imax}*2))}
   \begin{center}
 EOF
 	    if [ $det = "smrd" ]; then
