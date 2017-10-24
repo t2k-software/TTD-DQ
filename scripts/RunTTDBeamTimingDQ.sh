@@ -30,7 +30,7 @@ if [ -d "dq-${det}-b-v00" ]; then
     echo "If you wish to download the files again, completely remove the directory dq-${det}-b-v00 from $PWD."
 else
     echo "Working on directory /KEK-T2K/home/dataquality/data/summaryFiles/${det}/${year}/${period}/dq-${det}-b-v00"
-    iget -rV /KEK-T2K/home/dataquality/data/summaryFiles/${det}/${year}/${period}/dq-${det}-b-v00 .
+    iget -rV /KEK-T2K/home/dataquality/data/summaryFiles/tript/${year}/${period}/dq-${det}-b-v00 .
 fi
 
 echo
