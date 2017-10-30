@@ -77,10 +77,14 @@
   float ul_val = 0.;
   float ll_val = 0.;
 
+  int targetgain = 0;
+  int targetgains[3] = {1100, 1000, 950};
+  TLine* tglines[3];
+  
   if (inputString.find("ECAL") != std::string::npos)
-    {nRMMs = 12; det = "ECal"; ul_val = 50; ll_val = -50;}
+    {nRMMs = 12; det = "ECal"; ul_val = 50; ll_val = -50; targetgain = 1400;}
   else if (inputString.find("P0D") != std::string::npos)
-    {nRMMs = 6; det = "P0D";}
+    {nRMMs = 6; det = "P0D"; targetgain = 1100;}
   else if (inputString.find("SMRD") != std::string::npos)
     {nRMMs = 4; det = "SMRD";}
   else
@@ -155,7 +159,18 @@
       }
       
       base->GetXaxis().SetTimeFormat("%d\/%m");
-    
+
+      TLine* tg=new TLine(xaxismin->GetXmin(),targetgain,xaxismax->GetXmax(),targetgain);
+      tg->SetLineColor(2); tg->SetLineStyle(2);
+
+      if (targetgain && !d)
+	tg->Draw();
+      if (!targetgain && !d)
+	for(int t = 0; t < 3; t++) {
+	  tglines[t] = (TLine*)tg->Clone();
+	  tglines[t]->SetY1(targetgains[t]); tglines[t]->SetY2(targetgains[t]); tglines[t]->Draw();
+	}
+      
       if (int(ll_val) && d) {
 	ul->Draw(); ll->Draw();
       }
@@ -173,6 +188,13 @@
 
     base->Draw("same colz");
     base->GetZaxis()->SetRangeUser(0,5000);
+    
+    if (targetgain && !d)
+      tg->Draw();
+    if (!targetgain && !d)
+      for(int t = 0; t < 3; t++) {
+	tglines[t]->Draw();
+      }
     
     if (int(ll_val) && d) {
       ul->Draw(); ll->Draw();
