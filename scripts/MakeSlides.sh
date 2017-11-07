@@ -8,6 +8,7 @@ read -p "Enter week period (MMDD-MMDD): " period
 read -p "Enter year (YYYY): " year
 echo
 read -p "Enter your name: " author
+echo
 
 month1=${period:0:2}
 day1=${period:2:2}
@@ -106,8 +107,13 @@ EOF
 	    LEGEND="BunchSeparation"
 	fi
 
-        # Beam Timing Plots
-	cat <<EOF >> $SLIDESNAME
+	if [ ! $(ls -1 ${CURDIR}/RunPeriods/${year}/${period}/BeamTiming/${det}/${DET_U}_bunch${plot}_weekly_*.png | wc -l) -eq $((${NRMM}+1)) ]; then
+	    echo "Did not find $((${NRMM}+1)) bunch ${plot} plots for the ${det}, these plots will not be added to the presentation."
+	    echo
+	else
+
+            # Beam Timing Plots
+	    cat <<EOF >> $SLIDESNAME
 
 \subsection{${DET} Bunch ${TITLE}}
 \begin{frame}{${DET} Bunch ${TITLE} (All RMMs) 1/$((${NRMM}/2+1))}
@@ -119,9 +125,9 @@ EOF
 \end{frame}
 EOF
 
-	let imax=${NRMM}/2;
-	for ((i=1; i<=$imax; i++)); do
-	    cat <<EOF >> $SLIDESNAME
+	    let imax=${NRMM}/2;
+	    for ((i=1; i<=$imax; i++)); do
+		cat <<EOF >> $SLIDESNAME
 \begin{frame}{${DET} Bunch ${TITLE} (by RMM) $((${i}+1))/$((${NRMM}/2+1))}
   \begin{center}
     \includegraphics[width=0.45\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/BeamTiming/${det}/${DET_U}_bunch${plot}_weekly_rmm$((${i}*2-2)).png}
@@ -130,9 +136,10 @@ EOF
   \end{center}
 \end{frame}
 EOF
-	done # Loop over number of slides
-    done
-
+	    done # Loop over number of slides
+	fi
+    done # Loop over timing plots
+    
     # Gain Plots    
     
     let imax=${NRMM}/6;
@@ -140,7 +147,12 @@ EOF
 	let imax=1;
     fi
     
-    cat <<EOF >> $SLIDESNAME
+    if [ ! $(ls -1 ${CURDIR}/RunPeriods/${year}/${period}/Gain/${det}/gain*${DET_U}_*.png | wc -l) -eq $(((${NRMM}+1)*2)) ]; then
+        echo "Did not find $(((${NRMM}+1)*2)) gain plots for the ${det}, these plots will not be added to the presentation."
+        echo
+    else
+
+	cat <<EOF >> $SLIDESNAME
 
 \subsection{${DET} Gain Drift}
 \begin{frame}{${DET} Gain Drift (All RMMs) 1/$((${imax}+1))}
@@ -152,48 +164,9 @@ EOF
 \end{frame}
 EOF
     
-    for ((i=1; i<=$imax; i++)); do
-	cat <<EOF >> $SLIDESNAME
-\begin{frame}{${DET} Gain Drift (by RMM) $((${i}+1))/$((${imax}+1))}
-  \begin{center}
-EOF
-	if [ $det = "smrd" ]; then
-	    let jmax=2
-	else
-	    let jmax=3
-	fi
-	for ((j=$jmax; j>=1; j--)); do
-	    cat <<EOF >> $SLIDESNAME
-    \includegraphics[width=0.45\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/Gain/${det}/gainDriftnew${DET_U}_RMM$((${i}*2*${jmax}-2*${j})).png}
-    \hspace{0.5cm}
-    \includegraphics[width=0.45\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/Gain/${det}/gainDriftnew${DET_U}_RMM$((${i}*2*${jmax}-2*${j}+1)).png}
-    \\
-EOF
-	done # Loop over figures on slide
-	
-	cat <<EOF >> $SLIDESNAME
-  \end{center}
-\end{frame}
-EOF
-    done # Loop over number of slides
-    
-
-    # Pedestal Plots    
-    cat <<EOF >> $SLIDESNAME
-
-\subsection{${DET} Pedestal Drift}
-EOF
-    
-    let k=1
-    for gain in Low High; do
-	
-	let imax=${NRMM}/6;
-	if [ $imax -eq 0 ]; then 
-	    let imax=1;
-	fi
 	for ((i=1; i<=$imax; i++)); do
 	    cat <<EOF >> $SLIDESNAME
-\begin{frame}{${DET} Pedestal Drift (${gain} Gain by RMM) ${k}/$((${imax}*2))}
+\begin{frame}{${DET} Gain Drift (by RMM) $((${i}+1))/$((${imax}+1))}
   \begin{center}
 EOF
 	    if [ $det = "smrd" ]; then
@@ -203,9 +176,9 @@ EOF
 	    fi
 	    for ((j=$jmax; j>=1; j--)); do
 		cat <<EOF >> $SLIDESNAME
-    \includegraphics[width=0.45\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/Ped/${det}/peddrift${gain}new${DET_U}_RMM$((${i}*2*${jmax}-2*${j})).png}
+    \includegraphics[width=0.45\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/Gain/${det}/gainDriftnew${DET_U}_RMM$((${i}*2*${jmax}-2*${j})).png}
     \hspace{0.5cm}
-    \includegraphics[width=0.45\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/Ped/${det}/peddrift${gain}new${DET_U}_RMM$((${i}*2*${jmax}-2*${j}+1)).png}
+    \includegraphics[width=0.45\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/Gain/${det}/gainDriftnew${DET_U}_RMM$((${i}*2*${jmax}-2*${j}+1)).png}
     \\
 EOF
 	    done # Loop over figures on slide
@@ -214,13 +187,63 @@ EOF
   \end{center}
 \end{frame}
 EOF
-
-	    let k++
 	done # Loop over number of slides
-    done # Loop over pedestal gains
+    fi
+
+    if [ ! $(ls -1 ${CURDIR}/RunPeriods/${year}/${period}/Ped/${det}/peddrift*${DET_U}_*.png | wc -l) -eq $((${NRMM}*2)) ]; then
+        echo "Did not find $((${NRMM}*2)) pedestal plots for the ${det}, these plots will not be added to the presentation."
+        echo
+    else
+	
+        # Pedestal Plots    
+	cat <<EOF >> $SLIDESNAME
+
+\subsection{${DET} Pedestal Drift}
+EOF
     
-    # Channels Plots
-    cat <<EOF >> $SLIDESNAME
+	let k=1
+	for gain in Low High; do
+	    
+	    let imax=${NRMM}/6;
+	    if [ $imax -eq 0 ]; then 
+		let imax=1;
+	    fi
+	    for ((i=1; i<=$imax; i++)); do
+		cat <<EOF >> $SLIDESNAME
+\begin{frame}{${DET} Pedestal Drift (${gain} Gain by RMM) ${k}/$((${imax}*2))}
+  \begin{center}
+EOF
+		if [ $det = "smrd" ]; then
+		    let jmax=2
+		else
+		    let jmax=3
+		fi
+		for ((j=$jmax; j>=1; j--)); do
+		    cat <<EOF >> $SLIDESNAME
+    \includegraphics[width=0.45\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/Ped/${det}/peddrift${gain}new${DET_U}_RMM$((${i}*2*${jmax}-2*${j})).png}
+    \hspace{0.5cm}
+    \includegraphics[width=0.45\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/Ped/${det}/peddrift${gain}new${DET_U}_RMM$((${i}*2*${jmax}-2*${j}+1)).png}
+    \\
+EOF
+		done # Loop over figures on slide
+		
+		cat <<EOF >> $SLIDESNAME
+  \end{center}
+\end{frame}
+EOF
+		
+		let k++
+	    done # Loop over number of slides
+	done # Loop over pedestal gains
+    fi
+    
+    if [ ! $(ls -1 ${CURDIR}/RunPeriods/${year}/${period}/Channels/${det}/*Channels${DET_U}.png | wc -l) -eq 5 ]; then
+        echo "Did not find 5 channel plots for the ${det}, these plots will not be added to the presentation."
+        echo
+    else
+
+        # Channels Plots
+	cat <<EOF >> $SLIDESNAME
 \subsection{${DET} Channels}
 \begin{frame}{${DET} Channels Info (from Gain Files)}
   \begin{center}
@@ -237,8 +260,9 @@ EOF
 \end{frame}
 
 EOF
+    fi
 
-
+    
 done # Loop over detectors
 
 cat <<EOF >> $SLIDESNAME
