@@ -149,7 +149,12 @@
 	ul->SetLineColor(2);
 	ll->SetLineColor(2);
       }
-    
+
+      if (d) {
+	TLine* nd=new TLine(xaxismin->GetXmin(),0.0,xaxismax->GetXmax(),0.0);
+	nd->SetLineColor(2); nd->SetLineStyle(2);
+      }
+      
       base->Draw("");
       base->SetMarkerColor(0);
 
@@ -170,11 +175,12 @@
 	  tglines[t] = (TLine*)tg->Clone();
 	  tglines[t]->SetY1(targetgains[t]); tglines[t]->SetY2(targetgains[t]); tglines[t]->Draw();
 	}
-      
+
       if (int(ll_val) && d) {
 	ul->Draw(); ll->Draw();
       }
-    
+      if (d) nd->Draw();
+      
       sprintf(hfile,"gain%snew%s_RMM%d.png",drift.c_str(),det.c_str(),rmm);      
       
       if ((TFile*)rootfile[0]->GetListOfKeys()->Contains(hname)) {NULL;}
@@ -199,6 +205,7 @@
     if (int(ll_val) && d) {
       ul->Draw(); ll->Draw();
     }
+    if (d) nd->Draw();
     
     sprintf(hfile,"gain%snew%s_All.png",drift.c_str(),det.c_str());
     c0->SaveAs(hfile);

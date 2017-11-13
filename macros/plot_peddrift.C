@@ -145,6 +145,9 @@
       ll->SetLineColor(2);
     }
     
+    TLine* nd=new TLine(xaxismin->GetXmin(),0.0,xaxismax->GetXmax(),0.0);
+    nd->SetLineColor(2); nd->SetLineStyle(2);
+    
     base->Draw("");
     base->SetMarkerColor(0);
     
@@ -158,6 +161,7 @@
     if (int(ll_val)) {
       ul->Draw(); ll->Draw();
     }
+    nd->Draw();
 
     if ((TFile*)rootfile[0]->GetListOfKeys()->Contains(hname)) {NULL;}
     else break;
@@ -201,7 +205,8 @@
     if (int(ll_val)) {
       ul->Draw(); ll->Draw();
     }
-    
+    nd->Draw();
+
     if ((TFile*)rootfile[0]->GetListOfKeys()->Contains(hname)) {NULL;}
     else break;
 
