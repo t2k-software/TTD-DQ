@@ -25,16 +25,10 @@ BeamTimingData::BeamTimingData(std::string fileList) {
 
   inputString = fRootFiles.at(0)->GetName();
 
-  // if (inputString.find("ECAL") != std::string::npos)
-  //   {fDet = "ECal"; std::copy(minTimeBunchECAL, minTimeBunchECAL+8, minTimeBunch); fnRMMs = nRMM_ECAL;}
-  // else if (inputString.find("P0D") != std::string::npos)
-  //   {fDet = "P0D";  std::copy(minTimeBunchP0D, minTimeBunchP0D+8, minTimeBunch); fnRMMs = nRMM_P0D;}
-  // else if (inputString.find("SMRD") != std::string::npos)
-  //   {fDet = "SMRD"; std::copy(minTimeBunchSMRD, minTimeBunchSMRD+8, minTimeBunch); fnRMMs = nRMM_SMRD;}
   if (inputString.find("ecal") != std::string::npos)
     {fDet = "ECal"; std::copy(minTimeBunchECAL, minTimeBunchECAL+8, minTimeBunch); fnRMMs = nRMM_ECAL;}
   else if (inputString.find("p0d") != std::string::npos)
-    {fDet = "P0D";  std::copy(minTimeBunchP0D, minTimeBunchP0D+8, minTimeBunch); fnRMMs = nRMM_P0D;}
+    {fDet = "P0D";  std::copy(minTimeBunchP0D,  minTimeBunchP0D+8,  minTimeBunch); fnRMMs = nRMM_P0D; }
   else if (inputString.find("smrd") != std::string::npos)
     {fDet = "SMRD"; std::copy(minTimeBunchSMRD, minTimeBunchSMRD+8, minTimeBunch); fnRMMs = nRMM_SMRD;}
 
@@ -474,6 +468,10 @@ void BeamTimingData::DrawGraphSigma(int rmm){
     else fHistoSigma[iBunch]->Draw("P same");
   }
 
+  // Design bunch width line
+  TLine *designSigma = new TLine(fHistoSigma[0]->GetXaxis()->GetXmin(), bunchWidthDesign, fHistoSigma[0]->GetXaxis()->GetXmax(), bunchWidthDesign);
+  designSigma->SetLineColor(2); designSigma->SetLineStyle(2); designSigma->Draw();
+
   // Print the title
   TText *titleboxsigma;
   if(rmm!=-999)
@@ -494,6 +492,7 @@ void BeamTimingData::DrawGraphSigma(int rmm){
   for(int iBunch = 0; iBunch < nBunch; iBunch++)
     delete fHistoSigma[iBunch];
     
+  delete designSigma;
   delete titleboxsigma;
   delete can;
 
@@ -511,6 +510,10 @@ void BeamTimingData::DrawGraphSep(int rmm){
     else fHistoSep[iBunch]->Draw("P same");
   }
 
+  // Design bunch separation line
+  TLine *designSeparation = new TLine(fHistoSep[0]->GetXaxis()->GetXmin(), bunchSeparationDesign, fHistoSep[0]->GetXaxis()->GetXmax(), bunchSeparationDesign);
+  designSeparation->SetLineColor(2); designSeparation->SetLineStyle(2); designSeparation->Draw();
+  
   // Print the title
   TText *titleboxsigma;
   if(rmm!=-999)
@@ -531,6 +534,7 @@ void BeamTimingData::DrawGraphSep(int rmm){
   for(int iBunch = 0; iBunch < nBunch-1; iBunch++)
     delete fHistoSep[iBunch];
 
+  delete designSeparation;
   delete titleboxsigma;
   delete can;
   

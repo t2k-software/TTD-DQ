@@ -26,6 +26,8 @@ static const double minTimeBunchSMRD[8] = {2750,3325,3925,4500,5075,5675,6250,68
 static const int nRMM_ECAL = 12;
 static const int nRMM_P0D  = 6;
 static const int nRMM_SMRD = 4;
+static const int bunchSeparationDesign = 581; // Design Bunch Separation 581 ns
+static const int bunchWidthDesign = 58; // Design Bunch Width 58 ns
 
 inline bool exists_file(const std::string& name){
   struct stat buffer;
