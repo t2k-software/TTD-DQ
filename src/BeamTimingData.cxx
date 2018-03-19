@@ -1,4 +1,19 @@
+#define BEAMTIMINGDATA_CXX
+
 #include "BeamTimingData.hxx"
+
+#include "TMath.h"
+#include "TAxis.h"
+#include "TCanvas.h"
+#include "TText.h"
+#include "TLatex.h"
+#include "TF1.h"
+#include "TLine.h"
+
+#include <algorithm>
+#include <iostream>
+#include <fstream>
+
 
 BeamTimingData::BeamTimingData(std::string fileList) {
   
@@ -539,28 +554,4 @@ void BeamTimingData::DrawGraphSep(int rmm){
   delete can;
   
   return;
-}
-
-void Usage() {
-    std::cout << "BeamTimingData.exe -f [files.list] > [beamtiming.out]" << std::endl;
-    exit(1);
-}
-
-int main(int argc, char* argv[]) {
-  
-  // Process the options.
-  for (;;) {
-    int c = getopt(argc, argv, "f:");
-    //if (c<0) break;
-    switch (c) {
-      case 'f': {
-        BeamTimingData run(optarg);
-        break; 
-      }
-      default : {
-        Usage();
-      }
-    }
-  } // Closes process options for loop  
-  return 0;
 }

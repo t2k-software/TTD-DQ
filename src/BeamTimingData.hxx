@@ -1,19 +1,12 @@
-#include "TGraphErrors.h"
+#ifndef BEAMTIMINGDATA_HXX
+#define BEAMTIMINGDATA_HXX
+
 #include "TFile.h"
-#include "TMath.h"
-#include "TAxis.h"
-#include "TCanvas.h"
-#include "TText.h"
-#include "TLatex.h"
-#include "TF1.h"
-#include "TLine.h"
+#include "TGraphErrors.h"
 
 #include <sys/stat.h>
-#include <iostream>
-#include <fstream>
 #include <vector>
 #include <string>
-#include <algorithm>
 
 // Compile with g++ -o BeamTimingData.exe BeamTimingData.*xx `root-config --cflags --libs`
 
@@ -75,3 +68,5 @@ private:
   double fMaxSep;   // Maximum Separation
 
 };
+
+#endif
