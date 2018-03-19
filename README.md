@@ -32,7 +32,7 @@ Within the scripts directory are the following four scripts; two that control th
 
 Within the macros directory are the following.
 
- * BeamTimingData.cxx/hxx : Beam timing plotting files. These should (already) be compiled into the executable ./BeamTimingData.exe on the command line via g++ -o BeamTimingData.exe BeamTimingData.xx `root-config --cflags --libs`. The executable is then called to make all the beam timing plots.
+ * __BeamTimingData.cxx/hxx__ : Beam timing plotting files. These should be compiled _using the provided Makefile_ into the executable BeamTimingData.exe. The executable is then called to make all the beam timing plots.
  * __plot\_gaindrift.C__ : CINT root macro for plotting gain (drift) for each sub-detector.
  * __plot\_peddrift.C__ : CINT root macro for plotting high and low gain pedestal drift for each sub-detector.
  * __plot\_channels.C__ : CINT root macro for plotting the number of scanned, bad, dead, underflow and overflow channels from the gain data.
@@ -62,15 +62,17 @@ Distributing the Report
 
 After the report has been produced this should be distributed to the sub-detector DQ experts for them to check. This should be done on Monday when possible (sometimes the processing will finish late and you may have to delay distributing until the Tuesday) to give the experts time to go over the data prior to the DQ meeting on Wednesday.
 
-You should send an email to the experts contain the pdf slides, along with the root files produced when processing the ped and gain for each sub-detector. The root files will be found in directories with the following structure __/home/t2kuser/TTD-DQ/RunPeriods/<year>/<MMDD-MMDD>/<Gain or Ped>/<sub-detector>/DQ<Gain or Ped>Plots<sub-detector>\_<year>\_<MMDD-MMDD>\_<FirstRun>\_<LastRun>\_ref<ReferenceRun>.root__.
+You should send an email to the experts contain the pdf slides, along with the root files produced when processing the ped and gain for each sub-detector. The root files will be found in directories with the following structure 
+
+    /home/t2kuser/TTD-DQ/RunPeriods/<year>/<MMDD-MMDD>/<Gain or Ped>/<sub-detector>/DQ<Gain or Ped>Plots<sub-detector>_<year>_<MMDD-MMDD>_<FirstRun>_<LastRun>_ref<ReferenceRun>.root
 
 In your email you should also include any information relevant to the DQ for the previous week (e.g. operational problems with a given sub-detector).
 
 The DQ experts for each sub-detector are currently:
 
-* __ECal__ : [Stephane Zsoldos](s.zsoldos@qmul.ac.uk)
-* __P0D__ : [Jackie Schwehr](jackie.schwehr@colostate.edu)
-* __SMRD__ : [Nikolai Yershov](yershov@inr.ru) and [Kamil Porwit](kporwit@us.edu.pl)
+* __ECal__ : __Stephane Zsoldos__ (s.zsoldos@qmul.ac.uk)
+* __P0D__ : __Jackie Schwehr__(jackie.schwehr@colostate.edu)
+* __SMRD__ : __Nikolai Yershov__ (yershov@inr.ru) and __Kamil Porwit__ (kporwit@us.edu.pl)
 
 ## Detailed Checks
 
