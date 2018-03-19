@@ -58,10 +58,12 @@ int main(int argc, char* argv[]) {
     switch (c) {
       case 'h': {
         Usage();
+	break;
       }
       default : {
 	TestEnvVariables();
 	RunScripts();
+	break;
       }
     }
   } // Closes process options for loop  

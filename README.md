@@ -25,6 +25,7 @@ git clone https://github.com/t2k-software/TTD-DQ.git
 cd TTD-DQ
 git checkout MH
 make
+./TTD_DQ.exe
 ```
 
 ### Software Structure
@@ -92,7 +93,7 @@ In your email you should also include any information relevant to the DQ for the
 The DQ experts for each sub-detector are currently:
 
 * __ECal__ : __Stephane Zsoldos__ (s.zsoldos@qmul.ac.uk)
-* __P0D__ : __Jackie Schwehr__(jackie.schwehr@colostate.edu)
+* __P0D__ : ~~__Jackie Schwehr__ (jackie.schwehr@colostate.edu)~~ __Hang Su__ (has137@pitt.edu)
 * __SMRD__ : __Nikolai Yershov__ (yershov@inr.ru) and __Kamil Porwit__ (kporwit@us.edu.pl)
 
 ## Detailed Checks
