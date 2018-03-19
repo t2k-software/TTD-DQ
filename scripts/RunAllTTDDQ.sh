@@ -1,8 +1,10 @@
 #!/bin/bash
 
+# Written by M. Lawe
+
 #CURDIR=$(dirname $PWD)
 source $CMTROOT/mgr/setup.sh
-source $SOFFTASKSROOT/*/cmt/setup.sh
+source $SOFFTASKSROOT/cmt/setup.sh
 #cd $CURDIR
 
 read -p "Enter your name: " author

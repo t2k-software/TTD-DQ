@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Written by M. Lawe
+
 CURDIR=$(dirname $PWD)
 cd $CURDIR
 

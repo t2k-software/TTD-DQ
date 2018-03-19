@@ -1,8 +1,10 @@
 #!/bin/bash
 
+# Written by M. Lawe
+
 CURDIR=$(dirname $PWD)
 source $CMTROOT/mgr/setup.sh
-source $SOFFTASKSROOT/*/cmt/setup.sh
+source $SOFFTASKSROOT/cmt/setup.sh
 cd $CURDIR
 
 # Period must be Sunday to Saturday with format MMDD-MMDD, where MM = month and DD = day. e.g. 0610-0616
