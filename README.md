@@ -55,7 +55,11 @@ Once the processing has completed you can begin to generate the TTD DQ report. F
 
 It is then possible to proceed with creating the TTD DQ report. Navigate to the scripts directory within the TTD DQ software and execute the script ./RunAllTTDDQ.sh. You will be promoted to input relevant information on the command line, and the script will proceed to download the relevant files and run the data processing. Watch the terminal for obvious errors thrown by the processing.
 
-All being well a pdf containing the slides will be produced and its location will be written to the terminal; it will be of the form __/home/t2kuser/TTD-DQ/RunPeriods/<year>/<MMDD-MMDD>/Slides/ttd\_dq\_slides\_<year>-<MMDD-MMDD>.pdf__. You should check through the slides ensuring that they have been correctly populated. If there are any issues with the beam timing or gain/ped plots for a given sub-detector these can be reprocessed using the scripts ./RunTTDBeamTimingDQ.sh and ./RunTTDGainPedDQ.sh respectively. The slides should then be regenerated with ./MakeSlides.sh.
+All being well a pdf containing the slides will be produced and its location will be written to the terminal; it will be of the form 
+
+    /home/t2kuser/TTD-DQ/RunPeriods/<year>/<MMDD-MMDD>/Slides/ttd_dq_slides_<year>-<MMDD-MMDD>.pdf 
+    
+You should check through the slides ensuring that they have been correctly populated. If there are any issues with the beam timing or gain/ped plots for a given sub-detector these can be reprocessed using the scripts ./RunTTDBeamTimingDQ.sh and ./RunTTDGainPedDQ.sh respectively. The slides should then be regenerated with ./MakeSlides.sh.
 
 A detailed description of the slides and the relevant checks to make will be described in the next section, but once you are satisfied with slides they need distributing to the DQ experts for each sub-detector for checking over.
 Distributing the Report
