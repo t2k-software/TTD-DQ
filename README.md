@@ -10,6 +10,13 @@ The software used to produce a TTD DQ report is currently hosted on Matt's githu
 
 You can download the software yourself to prepare the DQ report, but is probably easiest to use the version already on the pontecorvo computer in the control room. The software can be found in the directory /home/t2kuser/TTD-DQ.
 
+### Requirements
+
+ * __CMT__ : Details on [ND280 Software Workbook](http://nd280.lancs.ac.uk/devel/invariant/nd280Doc/workbook/SoftwareUser.html) under "Installation and Setup Instructions for bash users"
+ * __nd280__ : v11r31 and v11r31p## with same details in the [Workbook](http://nd280.lancs.ac.uk/devel/invariant/nd280Doc/workbook/SoftwareUser.html). Make sure you have __soffTasks__
+ * __iRODS__ : Installation instructions at [t2k.org](https://www.t2k.org/nd280/runco/data/quality/forexperts/DQiRODSfolder/DQiRODS)
+ * __pdfLatex__ : Availabe with texLive, texLiveLatex, or MacTex for Mac OS X
+
 ### Installation
 
 ```bash 
