@@ -6,9 +6,19 @@ Guide to producing TTD Data Quality reports
 This guide describes how to produce a TTD DQ report, the documentation is a work in progress, but if you find mistakes, have questions or wish to contribute please contact Matt Lawe, who will attempt to help.
 ## Software
 
-The software used to produce a TTD DQ report is currently hosted on Matt's github account, with the core functionality also being present within the T2K CMT repository.
+The software used to produce a TTD DQ report is currently hosted on Matt's github. This fork is hosted on the t2k-software github account, with the core functionality also being present within the T2K CMT repository.
 
 You can download the software yourself to prepare the DQ report, but is probably easiest to use the version already on the pontecorvo computer in the control room. The software can be found in the directory /home/t2kuser/TTD-DQ.
+
+### Installation
+
+```bash 
+cd /path/to/checkout/dir
+git clone https://github.com/t2k-software/TTD-DQ.git
+cd TTD-DQ
+git checkout MH
+make
+```
 
 ### Software Structure
 
