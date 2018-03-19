@@ -1,0 +1,190 @@
+\documentclass{beamer}
+\usepackage[english] {babel}
+\usepackage[T1]      {fontenc}
+\usepackage{amsmath, amsfonts, graphicx}
+\usepackage{bibunits, tikz, version}
+\usetheme[pageofpages=of,% String used between the current page and the
+% total page count.
+alternativetitlepage=true,% Use the fancy title page.
+titlepagelogo=images/t2k_logo_medium,% Logo for the first page.
+]{Torino}
+\usecolortheme{nouvelle}
+
+\title{ECal Data Quality Assessment}
+\subtitle{Data Quality Checks for the period : 22/05/2016 - 28/05/2016}
+\author{Pierre Lasorak}
+\date{\today}
+
+\logo{\includegraphics[height=0.1\paperheight]{images/t2k_logo_medium.png}}
+
+\institute{\includegraphics[scale=0.032]{images/QM_logo.png}}
+
+\newcommand{\newCommandName}{0522-0528}
+
+\begin{document}
+\maketitle
+
+\begin{frame}{Overview}
+  \tableofcontents
+\end{frame}
+
+\section{Beam Timing}
+\begin{frame}{Beam Timing 1/6: RMM00 \& RMM01}
+  \begin{center}
+    \includegraphics[width=0.9\textwidth]{../\newCommandName /BeamTiming/bunchtiming_weekly1.png}
+    \begin{footnotesize}
+      \begin{itemize}
+      \item The shift is due to a change of neutrino timing.
+      \end{itemize}
+    \end{footnotesize}
+  \end{center}
+\end{frame}
+\begin{frame}{Beam Timing 2/6: RMM02 \& RMM03}
+  \begin{center}
+    \includegraphics[width=0.9\textwidth]{../\newCommandName /BeamTiming/bunchtiming_weekly2.png}
+  \end{center}
+\end{frame}
+\begin{frame}{Beam Timing 3/6: RMM04 \& RMM05}
+  \begin{center}
+    \includegraphics[width=0.9\textwidth]{../\newCommandName /BeamTiming/bunchtiming_weekly3.png}
+  \end{center}
+\end{frame}
+\begin{frame}{Beam Timing 4/6: RMM06 \& RMM07}
+  \begin{center}
+    \includegraphics[width=0.9\textwidth]{../\newCommandName /BeamTiming/bunchtiming_weekly4.png}
+  \end{center}
+\end{frame}
+\begin{frame}{Beam Timing 5/6: RMM08 \& RMM09}
+  \begin{center}
+    \includegraphics[width=0.9\textwidth]{../\newCommandName /BeamTiming/bunchtiming_weekly5.png}
+  \end{center}	
+\end{frame}
+\begin{frame}{Beam Timing 6/6: RMM10 \& RMM11}
+  \begin{center}
+    \includegraphics[width=0.9\textwidth]{../\newCommandName /BeamTiming/bunchtiming_weekly6.png}
+  \end{center}
+  
+\end{frame}
+
+\section{Gain Variation}
+\begin{frame}{Gain drift 1/2}
+  \begin{center}
+    \includegraphics[width=0.45\textwidth]{../\newCommandName /Gain/gaindriftnew0.png}
+    \hspace{0.5cm}
+    \includegraphics[width=0.45\textwidth]{../\newCommandName /Gain/gaindriftnew1.png}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Gain drift 2/2}
+  \begin{center}
+    \includegraphics[width=0.45\textwidth]{../\newCommandName /Gain/gaindriftnew2.png}
+    \hspace{0.5cm}
+    \includegraphics[width=0.45\textwidth]{../\newCommandName /Gain/gaindriftnew3.png}
+  \end{center}
+\end{frame}
+
+\section{Pedestal Variation}
+\begin{frame}{Pedestal drift 1/4}
+  \begin{center}
+    \includegraphics[width=0.9\textwidth]{../\newCommandName /Ped/PedDriftRMM0.png}
+  \end{center}
+\end{frame}
+\begin{frame}{Pedestal drift 2/4}
+  \begin{center}
+    \includegraphics[width=0.9\textwidth]{../\newCommandName /Ped/PedDriftRMM1.png}
+  \end{center}
+\end{frame}
+\begin{frame}{Pedestal drift 3/4}
+  \begin{center}
+    \includegraphics[width=0.9\textwidth]{../\newCommandName /Ped/PedDriftRMM2.png}
+  \end{center}
+\end{frame}
+\begin{frame}{Pedestal drift 4/4}
+  \begin{center}
+    \includegraphics[width=0.9\textwidth]{../\newCommandName /Ped/PedDriftRMM3.png}
+  \end{center}
+\end{frame}
+
+\section{Channels}
+\begin{frame}{Total / Dead / Bad / Overflow / Underflow channels (from Gain files)}
+  \begin{center}
+    \includegraphics[width=0.3\textwidth]{../\newCommandName /Channels/totChannels.png}
+    \hspace{0.2cm}
+    \includegraphics[width=0.3\textwidth]{../\newCommandName /Channels/DeadChannels.png}
+    \hspace{0.2cm}
+    \includegraphics[width=0.3\textwidth]{../\newCommandName /Channels/BadChannels.png} \\
+    \vspace{0.2cm}
+    \includegraphics[width=0.3\textwidth]{../\newCommandName /Channels/OverChannels.png}
+    \hspace{0.5cm}
+    \includegraphics[width=0.3\textwidth]{../\newCommandName /Channels/underChannels.png}
+  \end{center}
+\end{frame}
+\section{Flags} 
+\begin{frame}{Flags}
+  \begin{center}
+    \begin{itemize}
+    \item ECal wasn't in local during this week
+    % \end{itemize}
+    % \vspace{0.2cm}
+    % \begin{scriptsize}
+    %   \begin{tabular}{c|c|c|c|l}
+    %     \hline \hline
+    %     First run & Starting time (GMT)  & Last run & Ending time (GMT) & Cause \\
+    %     \hline
+    %     12538|0 & 12/05 @ 02:08:02 & 12538|4 & 12/05 @ 04:04:12 &  Calibration \\
+    %     \hline \hline
+    %   \end{tabular}
+    % \end{scriptsize}
+    % \begin{itemize}
+    % \item A bad flag will be set for all the detector during this period (flag=4095).
+    \item No RMM skew detected.
+    \end{itemize}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Flags - Plots}
+  \begin{center}
+          \begin{minipage}[t]{0.48\linewidth}
+            \begin{center}
+      Beam\\$ $ \\
+      \includegraphics[scale=0.23, angle = 0]{../\newCommandName /validation_ECAL_beam.png}
+    \end{center}	
+  \end{minipage}
+  \begin{minipage}[t]{0.48\linewidth}
+    \begin{center}		
+      Cosmics\\$ $\\
+      \includegraphics[scale=0.23, angle = 0]{../\newCommandName /validation_ECAL_cosmic.png}
+    \end{center}
+  \end{minipage}
+\end{center}
+\end{frame}
+
+\end{document}
+
+\begin{frame}{Note}
+  \begin{center}
+    \begin{footnotesize}
+      \begin{itemize}
+      \item When the number of Dead Channels oscillate with 1 or 2 it is usually not so important:
+        
+        These channels usually go in the Bad Channels (you can see the anti-correlation).
+      \item Digging the documentation / code I could fine:
+        \begin{itemize}
+          \begin{footnotesize}
+          \item DEAD channel is when only pedestal peak is visible (HV trim is set to 255)
+          \item BAD channel is when channel saturates {\em or only pedestal peak is visible}
+          \item In practice, this is implemented as:
+            \begin{itemize}
+              \begin{footnotesize}
+                \item Dead channel: gain <= 0 (no p.e. peak found)
+                \item Bad channel: gain > 0 \& error < 0 (something went wrong with the search of the 2 p.e. peaks: too far or too close $\rightarrow$ saturation)
+              \end{footnotesize}
+            \end{itemize}
+          \end{footnotesize}
+        \end{itemize}
+      \item These 2 definitions overlap.
+      \item Overflow and Underflow Channels correspond to the channels where Gain are off the plots (slides 10 and 11).
+      \end{itemize}
+    \end{footnotesize}
+  \end{center}
+\end{frame}
