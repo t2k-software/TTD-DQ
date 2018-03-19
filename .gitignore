@@ -1,3 +1,5 @@
 macros/BeamTimingData.exe
 *.swp
 ~*
+*.exe
+*.o
