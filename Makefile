@@ -1,8 +1,13 @@
 #!/usr/bin/env make
-
-### AUTHOR: MATTHEW HOGAN
-### EMAIL: hoganman@gmail.com
-###
+# MAKEFILE 
+#
+# __AUTHOR__: MATTHEW HOGAN
+# __EMAIL__: hoganman@gmail.com
+# 
+# __Behavior__
+# * make          : compiles BeamTiming.exe and TTD_DQ.exe
+# * make     clean: removes .o files
+# * make distclean: removes .o and .exe files
 
 TTDDQ  := ${PWD}
 MACROS := $(TTDDQ)/macros
@@ -46,5 +51,11 @@ TTD_DQ.exe: TTD_DQ.o
 # clean
 #########################
 clean:
-	rm *exe *o
+	rm -f *o
+#########################
+
+# distclean
+#########################
+distclean:
+	rm -f *o *exe
 #########################

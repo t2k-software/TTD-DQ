@@ -12,6 +12,7 @@ You can download the software yourself to prepare the DQ report, but is probably
 
 ### Requirements
 
+ * __(g)make__ : Comes with linux unless you removed it yourself. If you cannot compile software since you don't have gmake, just alias gmake as make!
  * __CMT__ : Details on [ND280 Software Workbook](http://nd280.lancs.ac.uk/devel/invariant/nd280Doc/workbook/SoftwareUser.html) under "Installation and Setup Instructions for bash users"
  * __nd280__ : v11r31 and v11r31p## with same details in the [Workbook](http://nd280.lancs.ac.uk/devel/invariant/nd280Doc/workbook/SoftwareUser.html). Make sure you have __soffTasks__
  * __iRODS__ : Installation instructions at [t2k.org](https://www.t2k.org/nd280/runco/data/quality/forexperts/DQiRODSfolder/DQiRODS)
@@ -20,11 +21,13 @@ You can download the software yourself to prepare the DQ report, but is probably
 ### Installation
 
 ```bash 
-cd /path/to/checkout/dir
 git clone https://github.com/t2k-software/TTD-DQ.git
 cd TTD-DQ
-git checkout MH
 make
+```
+
+### Running the Package
+```bash
 ./TTD_DQ.exe
 ```
 
