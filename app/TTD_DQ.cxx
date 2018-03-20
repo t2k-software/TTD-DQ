@@ -1,6 +1,7 @@
 #define TTD_DQ_CXX
 
 #include "TSystem.h"
+#include "TString.h"
 
 #include <string>
 #include <iostream>
@@ -25,7 +26,7 @@ void MustHave(std::string envVar)
    if(!gSystem->Getenv(envVar.c_str()))
    {
        std::cout << "ERROR: " << envVar.c_str() << " is not set!" << std::endl;
-       exit(1);
+       Usage();
    }
 }
 

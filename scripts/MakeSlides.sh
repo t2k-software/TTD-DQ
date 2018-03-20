@@ -1,27 +1,51 @@
 #!/bin/bash
 
-# Written by M. Lawe
+### AUTHOR: MATTHEW LAWE
 
-CURDIR=$(dirname $PWD)
-cd $CURDIR
+f=$(readlink -f $0)
+. ${f%/*}/dateutils.sh
 
-# Period must be Sunday to Saturday with format MMDD-MMDD, where MM = month and DD = day. e.g. 0610-0616
-read -p "Enter week period (MMDD-MMDD): " period 
-read -p "Enter year (YYYY): " year
-echo
-read -p "Enter your name: " author
-echo
+CURDIR=$(dirname ${f%/*})
 
-month1=${period:0:2}
-day1=${period:2:2}
-month2=${period:5:2}
-day2=${period:7:2}
+USAGE="Usage: ${0##*/} [OPTION...]
+Create presentation file TTD data quality assesment.
+
+Options:
+  -w, --week=WEEK     Week relative to current week for which the plots
+                      and presentation are generated. The default value 
+                      is ${week} (Ie show data from last week).
+  -a, --author=NAME   TTD experts name.
+  -?, --help          Show this help list."
+week="-1"
+author="TTD Expert"
+while [ "$1" != "" ] ; do
+    case "$1" in
+	-w|--week)
+	    week="$2"
+	    shift;;
+	-a|--author)
+	    author="$2"
+	    shift;;
+	"-?"|--help)
+	    echo "$USAGE"
+	    exit 0
+	    ;;
+	*)
+	    echo "$USAGE"
+	    exit 1
+	    ;;
+    esac
+    shift
+done
+
+date_dir=$(dateDir $week)
+date_name=$(echo $date_dir | tr '/' '-')
 
 # Make a working directory
-mkdir -p $CURDIR/RunPeriods/$year/$period/Slides
-cd $CURDIR/RunPeriods/$year/$period/Slides
+mkdir -p $CURDIR/RunPeriods/$date_dir/Slides
+cd $CURDIR/RunPeriods/$date_dir/Slides
 
-SLIDESNAME=ttd_dq_slides_$year-$period.tex
+SLIDESNAME=ttd_dq_slides_$date_name.tex
 
 # Make slides tex file.
 cat <<EOF > $SLIDESNAME
@@ -50,7 +74,7 @@ titlepagelogo=${CURDIR}/images/t2k_logo_medium,% Logo for the first page.
 }
 
 \title{TTD Data Quality Assessment}
-\subtitle{Data Quality Checks for the period : ${day1}/${month1}/${year} - ${day2}/${month2}/${year}}
+\subtitle{Data Quality Checks for the period : ${date_dir}}
 \author{${author}}
 \date{\today}
 
@@ -109,7 +133,7 @@ EOF
 	    LEGEND="BunchSeparation"
 	fi
 
-	if [ ! $(ls -1 ${CURDIR}/RunPeriods/${year}/${period}/BeamTiming/${det}/${DET_U}_bunch${plot}_weekly_*.png | wc -l) -eq $((${NRMM}+1)) ]; then
+	if [ ! $(ls -1 ${CURDIR}/RunPeriods/${year}/${date_dir}/BeamTiming/${det}/${DET_U}_bunch${plot}_weekly_*.png | wc -l) -eq $((${NRMM}+1)) ]; then
 	    echo "Did not find $((${NRMM}+1)) bunch ${plot} plots for the ${det}, these plots will not be added to the presentation."
 	    echo
 	else
@@ -120,7 +144,7 @@ EOF
 \subsection{${DET} Bunch ${TITLE}}
 \begin{frame}{${DET} Bunch ${TITLE} (All RMMs) 1/$((${NRMM}/2+1))}
   \begin{center}
-    \includegraphics[width=0.6\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/BeamTiming/${det}/${DET_U}_bunch${plot}_weekly_all.png}
+    \includegraphics[width=0.6\textwidth]{${CURDIR}/RunPeriods/${year}/${date_dir}/BeamTiming/${det}/${DET_U}_bunch${plot}_weekly_all.png}
     \hspace{0.5cm}
     \includegraphics[width=0.3\textwidth]{${CURDIR}/images/${LEGEND}Legend.png}
   \end{center}
@@ -132,9 +156,9 @@ EOF
 		cat <<EOF >> $SLIDESNAME
 \begin{frame}{${DET} Bunch ${TITLE} (by RMM) $((${i}+1))/$((${NRMM}/2+1))}
   \begin{center}
-    \includegraphics[width=0.45\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/BeamTiming/${det}/${DET_U}_bunch${plot}_weekly_rmm$((${i}*2-2)).png}
+    \includegraphics[width=0.45\textwidth]{${CURDIR}/RunPeriods/${year}/${date_dir}/BeamTiming/${det}/${DET_U}_bunch${plot}_weekly_rmm$((${i}*2-2)).png}
     \hspace{0.5cm}
-    \includegraphics[width=0.45\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/BeamTiming/${det}/${DET_U}_bunch${plot}_weekly_rmm$((${i}*2-1)).png}
+    \includegraphics[width=0.45\textwidth]{${CURDIR}/RunPeriods/${year}/${date_dir}/BeamTiming/${det}/${DET_U}_bunch${plot}_weekly_rmm$((${i}*2-1)).png}
   \end{center}
 \end{frame}
 EOF
@@ -149,7 +173,7 @@ EOF
 	let imax=1;
     fi
     
-    if [ ! $(ls -1 ${CURDIR}/RunPeriods/${year}/${period}/Gain/${det}/gain*${DET_U}_*.png | wc -l) -eq $(((${NRMM}+1)*2)) ]; then
+    if [ ! $(ls -1 ${CURDIR}/RunPeriods/${year}/${date_dir}/Gain/${det}/gain*${DET_U}_*.png | wc -l) -eq $(((${NRMM}+1)*2)) ]; then
         echo "Did not find $(((${NRMM}+1)*2)) gain plots for the ${det}, these plots will not be added to the presentation."
         echo
     else
@@ -159,9 +183,9 @@ EOF
 \subsection{${DET} Gain Drift}
 \begin{frame}{${DET} Gain Drift (All RMMs) 1/$((${imax}+1))}
   \begin{center}
-    \includegraphics[width=0.68\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/Gain/${det}/gainnew${DET_U}_All.png}
+    \includegraphics[width=0.68\textwidth]{${CURDIR}/RunPeriods/${year}/${date_dir}/Gain/${det}/gainnew${DET_U}_All.png}
     \\
-    \includegraphics[width=0.68\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/Gain/${det}/gainDriftnew${DET_U}_All.png}
+    \includegraphics[width=0.68\textwidth]{${CURDIR}/RunPeriods/${year}/${date_dir}/Gain/${det}/gainDriftnew${DET_U}_All.png}
   \end{center}
 \end{frame}
 EOF
@@ -178,9 +202,9 @@ EOF
 	    fi
 	    for ((j=$jmax; j>=1; j--)); do
 		cat <<EOF >> $SLIDESNAME
-    \includegraphics[width=0.45\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/Gain/${det}/gainDriftnew${DET_U}_RMM$((${i}*2*${jmax}-2*${j})).png}
+    \includegraphics[width=0.45\textwidth]{${CURDIR}/RunPeriods/${year}/${date_dir}/Gain/${det}/gainDriftnew${DET_U}_RMM$((${i}*2*${jmax}-2*${j})).png}
     \hspace{0.5cm}
-    \includegraphics[width=0.45\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/Gain/${det}/gainDriftnew${DET_U}_RMM$((${i}*2*${jmax}-2*${j}+1)).png}
+    \includegraphics[width=0.45\textwidth]{${CURDIR}/RunPeriods/${year}/${date_dir}/Gain/${det}/gainDriftnew${DET_U}_RMM$((${i}*2*${jmax}-2*${j}+1)).png}
     \\
 EOF
 	    done # Loop over figures on slide
@@ -192,7 +216,7 @@ EOF
 	done # Loop over number of slides
     fi
 
-    if [ ! $(ls -1 ${CURDIR}/RunPeriods/${year}/${period}/Ped/${det}/peddrift*${DET_U}_*.png | wc -l) -eq $((${NRMM}*2)) ]; then
+    if [ ! $(ls -1 ${CURDIR}/RunPeriods/${year}/${date_dir}/Ped/${det}/peddrift*${DET_U}_*.png | wc -l) -eq $((${NRMM}*2)) ]; then
         echo "Did not find $((${NRMM}*2)) pedestal plots for the ${det}, these plots will not be added to the presentation."
         echo
     else
@@ -222,9 +246,9 @@ EOF
 		fi
 		for ((j=$jmax; j>=1; j--)); do
 		    cat <<EOF >> $SLIDESNAME
-    \includegraphics[width=0.45\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/Ped/${det}/peddrift${gain}new${DET_U}_RMM$((${i}*2*${jmax}-2*${j})).png}
+    \includegraphics[width=0.45\textwidth]{${CURDIR}/RunPeriods/${year}/${date_dir}/Ped/${det}/peddrift${gain}new${DET_U}_RMM$((${i}*2*${jmax}-2*${j})).png}
     \hspace{0.5cm}
-    \includegraphics[width=0.45\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/Ped/${det}/peddrift${gain}new${DET_U}_RMM$((${i}*2*${jmax}-2*${j}+1)).png}
+    \includegraphics[width=0.45\textwidth]{${CURDIR}/RunPeriods/${year}/${date_dir}/Ped/${det}/peddrift${gain}new${DET_U}_RMM$((${i}*2*${jmax}-2*${j}+1)).png}
     \\
 EOF
 		done # Loop over figures on slide
@@ -239,7 +263,7 @@ EOF
 	done # Loop over pedestal gains
     fi
     
-    if [ ! $(ls -1 ${CURDIR}/RunPeriods/${year}/${period}/Channels/${det}/*Channels${DET_U}.png | wc -l) -eq 5 ]; then
+    if [ ! $(ls -1 ${CURDIR}/RunPeriods/${year}/${date_dir}/Channels/${det}/*Channels${DET_U}.png | wc -l) -eq 5 ]; then
         echo "Did not find 5 channel plots for the ${det}, these plots will not be added to the presentation."
         echo
     else
@@ -249,22 +273,21 @@ EOF
 \subsection{${DET} Channels}
 \begin{frame}{${DET} Channels Info (from Gain Files)}
   \begin{center}
-    \includegraphics[width=0.45\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/Channels/${det}/DeadChannels${DET_U}.png}
+    \includegraphics[width=0.45\textwidth]{${CURDIR}/RunPeriods/${year}/${date_dir}/Channels/${det}/DeadChannels${DET_U}.png}
     \hspace{0.5cm}
-    \includegraphics[width=0.45\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/Channels/${det}/BadChannels${DET_U}.png}
+    \includegraphics[width=0.45\textwidth]{${CURDIR}/RunPeriods/${year}/${date_dir}/Channels/${det}/BadChannels${DET_U}.png}
     \\
-    \includegraphics[width=0.45\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/Channels/${det}/OverChannels${DET_U}.png}
+    \includegraphics[width=0.45\textwidth]{${CURDIR}/RunPeriods/${year}/${date_dir}/Channels/${det}/OverChannels${DET_U}.png}
     \hspace{0.5cm}
-    \includegraphics[width=0.45\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/Channels/${det}/underChannels${DET_U}.png}
+    \includegraphics[width=0.45\textwidth]{${CURDIR}/RunPeriods/${year}/${date_dir}/Channels/${det}/underChannels${DET_U}.png}
     \\
-    \includegraphics[width=0.45\textwidth]{${CURDIR}/RunPeriods/${year}/${period}/Channels/${det}/totChannels${DET_U}.png}
+    \includegraphics[width=0.45\textwidth]{${CURDIR}/RunPeriods/${year}/${date_dir}/Channels/${det}/totChannels${DET_U}.png}
   \end{center}
 \end{frame}
 
 EOF
     fi
 
-    
 done # Loop over detectors
 
 cat <<EOF >> $SLIDESNAME
@@ -274,10 +297,11 @@ EOF
 
 echo "Slides made, running pdflatex..."
 
-cd $CURDIR/beamer_style
-pdflatex -output-directory $CURDIR/RunPeriods/$year/$period/Slides $CURDIR/RunPeriods/$year/$period/Slides/$SLIDESNAME
-pdflatex -output-directory $CURDIR/RunPeriods/$year/$period/Slides $CURDIR/RunPeriods/$year/$period/Slides/$SLIDESNAME
+export TEXINPUTS=$CURDIR/beamer_style:$TEXINPUTS
+
+pdflatex -output-directory $CURDIR/RunPeriods/$date_dir/Slides $CURDIR/RunPeriods/$date_dir/Slides/$SLIDESNAME
+pdflatex -output-directory $CURDIR/RunPeriods/$date_dir/Slides $CURDIR/RunPeriods/$date_dir/Slides/$SLIDESNAME
 
 echo
-echo "Check output slides in" $CURDIR/RunPeriods/$year/$period/Slides
+echo "Check output slides in" $CURDIR/RunPeriods/$date_dir/Slides
 echo "DONE."
