@@ -1,9 +1,12 @@
 #!/bin/bash
 
+### AUTHOR: MATTHEW LAWE
+
 f=$(readlink -f $0)
 . ${f%/*}/dateutils.sh
 
-source /home/t2k/mlawe/t2k/nd280devel/soffTasks/v1r50/cmt/setup.sh
+# source /home/t2k/mlawe/t2k/nd280devel/soffTasks/v1r50/cmt/setup.sh
+source $SOFFTASKSROOT/cmt/setup.sh
 
 CURDIR=$(dirname ${f%/*})
 

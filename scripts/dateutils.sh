@@ -1,3 +1,4 @@
+### AUTHOR: MATTHEW LAWE
 
 function dateDir
 {

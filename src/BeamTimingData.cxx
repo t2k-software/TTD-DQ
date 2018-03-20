@@ -1,4 +1,19 @@
+#define BEAMTIMINGDATA_CXX
+
 #include "BeamTimingData.hxx"
+
+#include "TMath.h"
+#include "TAxis.h"
+#include "TCanvas.h"
+#include "TText.h"
+#include "TLatex.h"
+#include "TF1.h"
+#include "TLine.h"
+
+#include <algorithm>
+#include <iostream>
+#include <fstream>
+
 
 BeamTimingData::BeamTimingData(std::string fileList) {
   
@@ -43,7 +58,7 @@ BeamTimingData::BeamTimingData(std::string fileList) {
   SetGraphStyle();
   DrawGraphs();
 
-  for(int rmm = 0; rmm < fnRMMs; rmm++){
+  for(Int_t rmm = 0; rmm < fnRMMs; rmm++){
     FillGraphs(rmm);
     SetGraphStyle();
     DrawGraphs(rmm);
@@ -52,7 +67,7 @@ BeamTimingData::BeamTimingData(std::string fileList) {
   return;
 }
 
-void BeamTimingData::FillGraphs(int rmm) {
+void BeamTimingData::FillGraphs(Int_t rmm) {
   
   TGraphErrors *fileHistoMean;    // define all the graphs for each file and each bunch
   TGraphErrors *fileHistoSigma;   // define all the graphs for each file and each bunch
@@ -63,7 +78,7 @@ void BeamTimingData::FillGraphs(int rmm) {
   fMaxSep = 0.0;
   
   // Loop over the bunches
-  for(int iBunch = 0; iBunch < nBunch; iBunch++){
+  for(Int_t iBunch = 0; iBunch < nBunch; iBunch++){
     OutOfRange[iBunch] = 0;
     
     fHistoMean [iBunch] = new TGraphErrors();
@@ -119,41 +134,41 @@ void BeamTimingData::FillGraphs(int rmm) {
 
       if(!fileHistoSigma || !fileHistoMean) continue;
       
-      for(int iPoint = 0; iPoint < fileHistoMean->GetN(); iPoint++){
-	double x,y,ey,s,es,xp,yp,eyp; // x = date/time, y = mean, ey = mean error, s = sigma, es = sigma error, xp = previous date/time, yp = previous mean, eyp = previous mean error
-	fileHistoMean->GetPoint(iPoint, x, y);
-	ey = fileHistoMean->GetErrorY(iPoint);
-	fileHistoSigma->GetPoint(iPoint, x, s);
-	es = fileHistoSigma->GetErrorY(iPoint);
+      for(Int_t iPoInt_t = 0; iPoInt_t < fileHistoMean->GetN(); iPoInt_t++){
+	Double_t x,y,ey,s,es,xp,yp,eyp; // x = date/time, y = mean, ey = mean error, s = sigma, es = sigma error, xp = previous date/time, yp = previous mean, eyp = previous mean error
+	fileHistoMean->GetPoInt_t(iPoInt_t, x, y);
+	ey = fileHistoMean->GetErrorY(iPoInt_t);
+	fileHistoSigma->GetPoInt_t(iPoInt_t, x, s);
+	es = fileHistoSigma->GetErrorY(iPoInt_t);
 	
 	if(x > 0 && y > 0){
 	  if(minTimeBunch[iBunch] < y && y < minTimeBunch[iBunch]+TimeRange) {
 	    // Bunch mean time
-	    fHistoMean[iBunch]->SetPoint     (fHistoMean[iBunch]->GetN(), x, y);
-	    fHistoMean[iBunch]->SetPointError(fHistoMean[iBunch]->GetN()-1, 0, ey); // -1 because a point has just been added in previous line
+	    fHistoMean[iBunch]->SetPoInt_t     (fHistoMean[iBunch]->GetN(), x, y);
+	    fHistoMean[iBunch]->SetPoInt_tError(fHistoMean[iBunch]->GetN()-1, 0, ey); // -1 because a poInt_t has just been added in previous line
 	    // Bunch width (sigma)
-	    fHistoSigma[iBunch]->SetPoint     (fHistoSigma[iBunch]->GetN(), x, 2*s); // Bunch width is twice the sigma
-	    fHistoSigma[iBunch]->SetPointError(fHistoSigma[iBunch]->GetN()-1, 0, 2*es); // Double error too
+	    fHistoSigma[iBunch]->SetPoInt_t     (fHistoSigma[iBunch]->GetN(), x, 2*s); // Bunch width is twice the sigma
+	    fHistoSigma[iBunch]->SetPoInt_tError(fHistoSigma[iBunch]->GetN()-1, 0, 2*es); // Double error too
 	    if(2*s < fMinSigma) fMinSigma = 2*s;
 	    if(2*s > fMaxSigma) fMaxSigma = 2*s;
 	    // Bunch separation
 	    if(iBunch){
-	      for(int nPoint = 0; nPoint < fHistoMean[iBunch-1]->GetN(); nPoint++){
-		fHistoMean[iBunch-1]->GetPoint(nPoint, xp, yp);
-		eyp = fHistoMean[iBunch-1]->GetErrorY(nPoint);
+	      for(Int_t nPoInt_t = 0; nPoInt_t < fHistoMean[iBunch-1]->GetN(); nPoInt_t++){
+		fHistoMean[iBunch-1]->GetPoInt_t(nPoInt_t, xp, yp);
+		eyp = fHistoMean[iBunch-1]->GetErrorY(nPoInt_t);
 		if(xp == x) { // if x value (time) are the same, subtract previous mean from current mean
-		  fHistoSep[iBunch-1]->SetPoint     (fHistoSep[iBunch-1]->GetN(), x, y-yp);
-		  fHistoSep[iBunch-1]->SetPointError(fHistoSep[iBunch-1]->GetN()-1, 0, TMath::Sqrt((ey*ey)+(eyp*eyp)) );
+		  fHistoSep[iBunch-1]->SetPoInt_t     (fHistoSep[iBunch-1]->GetN(), x, y-yp);
+		  fHistoSep[iBunch-1]->SetPoInt_tError(fHistoSep[iBunch-1]->GetN()-1, 0, TMath::Sqrt((ey*ey)+(eyp*eyp)) );
 		  if(y-yp < fMinSep) fMinSep = y-yp;
 		  if(y-yp > fMaxSep) fMaxSep = y-yp;
 		} // if(xp==x)
-	      } // for(int nPoint...
+	      } // for(Int_t nPoInt_t...
 	    } // if(iBunch)
 	  }
 	  else
 	    OutOfRange[iBunch]++;
 	} // if(x > 0 && y > 0)
-      } // for(int iPoint...
+      } // for(Int_t iPoInt_t...
     } // file iterator
   } // bunches
   
@@ -176,7 +191,7 @@ void BeamTimingData::SetGraphStyleMean() {
   fHistoMean[0]->GetYaxis()->SetTickLength(0.035);
   
   // loop bunches
-  for(int iBunch = 0; iBunch < nBunch; iBunch++){
+  for(Int_t iBunch = 0; iBunch < nBunch; iBunch++){
     
     if(iBunch != 0){
       // Remove the X axis
@@ -220,7 +235,7 @@ void BeamTimingData::SetGraphStyleSigma() {
   fHistoSigma[0]->GetYaxis()->SetTickLength(0.035);
  
   // loop bunches
-  for(int iBunch = 0; iBunch < nBunch; iBunch++){
+  for(Int_t iBunch = 0; iBunch < nBunch; iBunch++){
     
     if(iBunch != 0){
       // Remove the X axis
@@ -267,7 +282,7 @@ void BeamTimingData::SetGraphStyleSep() {
   fHistoSep[0]->GetYaxis()->SetTickLength(0.035);
   
   // loop bunches
-  for(int iBunch = 0; iBunch < nBunch-1; iBunch++){
+  for(Int_t iBunch = 0; iBunch < nBunch-1; iBunch++){
     
     if(iBunch != 0){
       // Remove the X axis
@@ -297,7 +312,7 @@ void BeamTimingData::SetGraphStyleSep() {
   return;
 }
 
-void BeamTimingData::DrawGraphMean(int rmm){
+void BeamTimingData::DrawGraphMean(Int_t rmm){
 
   TCanvas* can = new TCanvas("can_mean",Form("%s Bunch Timing", fDet.c_str()), 600, 600);
   can->SetTitle("");
@@ -310,7 +325,7 @@ void BeamTimingData::DrawGraphMean(int rmm){
   float ypadlow  = 0.0;
   float ypadhigh = 0.211;
 
-  for(int iBunch = 0; iBunch < nBunch; iBunch++){        // loop over the bunches
+  for(Int_t iBunch = 0; iBunch < nBunch; iBunch++){        // loop over the bunches
 
     // Setup the pads
     if(iBunch==0) {
@@ -345,15 +360,15 @@ void BeamTimingData::DrawGraphMean(int rmm){
       std::cout << "line Fit done, bunch:"<< iBunch << std::endl;
     }
     
-    double parVal = lineFits[iBunch]->GetParameter(0);
-    double parErr = lineFits[iBunch]->GetParError(0);
-    double chi2   = lineFits[iBunch]->GetChisquare();
-    int NDF       = lineFits[iBunch]->GetNDF();
+    Double_t parVal = lineFits[iBunch]->GetParameter(0);
+    Double_t parErr = lineFits[iBunch]->GetParError(0);
+    Double_t chi2   = lineFits[iBunch]->GetChisquare();
+    Int_t NDF       = lineFits[iBunch]->GetNDF();
     textbox[iBunch] = new TLatex(0.2, ypadlow-0.035, Form("Mean = %4.2f #pm %4.2f, #chi^{2}/NDF = %4.2f / %d (OOR = %d)", parVal,parErr,chi2,NDF, OutOfRange[iBunch])); // ypadlow + 0.005
     textbox[iBunch]->SetTextSize(0.025);
     textbox[iBunch]->Draw();
     
-  } // for(int iBunch = 0...
+  } // for(Int_t iBunch = 0...
   
   std::vector<TPad*> labelMask;
   // Label masks for ECal
@@ -389,7 +404,9 @@ void BeamTimingData::DrawGraphMean(int rmm){
     (*it)->Draw();
 
   TPad *maskPads[nBunch-1];
-  TLine *vertLine = new TLine(0.991,0,0.991,1.00); vertLine->SetLineWidth(0.1); vertLine->SetLineColor(1);
+  TLine *vertLine = new TLine(0.991,0,0.991,1.00); 
+  vertLine->SetLineWidth(0.1);
+  vertLine->SetLineColor(1);
 
   std::vector<TLine*> cutLine;
   cutLine.push_back(new TLine(0.068,0,0.068,0.3));
@@ -404,7 +421,7 @@ void BeamTimingData::DrawGraphMean(int rmm){
   
   ypadhigh = 0.204;
   
-  for(int iBunch = 0; iBunch < nBunch-1; iBunch++){
+  for(Int_t iBunch = 0; iBunch < nBunch-1; iBunch++){
     maskPads[iBunch] = new TPad("","",0.05,ypadhigh-0.006,0.9,ypadhigh+0.007);
     maskPads[iBunch]->Draw();
     maskPads[iBunch]->cd();
@@ -417,12 +434,14 @@ void BeamTimingData::DrawGraphMean(int rmm){
     can->cd();
   }
   
-  // Print the title
+  // PrInt_t the title
   TText *titleboxsigma;
   if(rmm!=-999)
-    titleboxsigma = new TText(0.01,0.96, Form("%s RMM %02d Bunch Timing [ns]", fDet.c_str(), rmm)); // 0.01 0.96
+    titleboxsigma = new TText(0.01,0.96,
+	    Form("%s RMM %02d Bunch Timing [ns]", fDet.c_str(), rmm)); // 0.01 0.96
   else
-    titleboxsigma = new TText(0.01,0.96, Form("%s Bunch Timing [ns]", fDet.c_str(), rmm)); // 0.01 0.96
+    titleboxsigma = new TText(0.01,0.96,
+	    Form("%s Bunch Timing [ns]", fDet.c_str(), rmm)); // 0.01 0.96
 
   titleboxsigma->SetNDC();
   titleboxsigma->SetTextSize(0.055); // 0.055
@@ -434,7 +453,7 @@ void BeamTimingData::DrawGraphMean(int rmm){
     can->SaveAs(Form("%s_bunchtiming_weekly_all.png", fDet.c_str()));
   
   // clean up
-  for(int iBunch = 0; iBunch < nBunch; iBunch++){
+  for(Int_t iBunch = 0; iBunch < nBunch; iBunch++){
     if (iBunch) delete maskPads[iBunch-1];
     delete textbox[iBunch];
     delete lineFits[iBunch];
@@ -457,27 +476,32 @@ void BeamTimingData::DrawGraphMean(int rmm){
   return;
 }
 
-void BeamTimingData::DrawGraphSigma(int rmm){
+void BeamTimingData::DrawGraphSigma(Int_t rmm){
 
-  TCanvas* can = new TCanvas("can_sigma",Form("%s Bunch Width", fDet.c_str()), 600, 600);
+  TCanvas* can = new TCanvas("can_sigma",
+	  Form("%s Bunch Width", fDet.c_str()), 600, 600);
   can->SetTitle("");
   
   // loop bunches
-  for(int iBunch = 0; iBunch < nBunch; iBunch++){
+  for(Int_t iBunch = 0; iBunch < nBunch; iBunch++){
     if(iBunch==0) fHistoSigma[iBunch]->Draw("AP");
     else fHistoSigma[iBunch]->Draw("P same");
   }
 
   // Design bunch width line
-  TLine *designSigma = new TLine(fHistoSigma[0]->GetXaxis()->GetXmin(), bunchWidthDesign, fHistoSigma[0]->GetXaxis()->GetXmax(), bunchWidthDesign);
+  TLine *designSigma = new TLine(fHistoSigma[0]->GetXaxis()->GetXmin(), 
+	  bunchWidthDesign, fHistoSigma[0]->GetXaxis()->GetXmax(), 
+	  bunchWidthDesign);
   designSigma->SetLineColor(2); designSigma->SetLineStyle(2); designSigma->Draw();
 
-  // Print the title
+  // PrInt_t the title
   TText *titleboxsigma;
   if(rmm!=-999)
-    titleboxsigma = new TText(0.01,0.96, Form("%s RMM %02d Bunch Width [ns]", fDet.c_str(), rmm)); // 0.01 0.96
+    titleboxsigma = new TText(0.01,0.96, 
+	    Form("%s RMM %02d Bunch Width [ns]", fDet.c_str(), rmm)); // 0.01 0.96
   else
-    titleboxsigma = new TText(0.01,0.96, Form("%s Bunch Width [ns]", fDet.c_str(), rmm)); // 0.01 0.96
+    titleboxsigma = new TText(0.01,0.96, 
+	    Form("%s Bunch Width [ns]", fDet.c_str(), rmm)); // 0.01 0.96
   
   titleboxsigma->SetNDC();
   titleboxsigma->SetTextSize(0.055); // 0.055
@@ -489,7 +513,7 @@ void BeamTimingData::DrawGraphSigma(int rmm){
     can->SaveAs(Form("%s_bunchwidth_weekly_all.png", fDet.c_str()));
   
   // clean up
-  for(int iBunch = 0; iBunch < nBunch; iBunch++)
+  for(Int_t iBunch = 0; iBunch < nBunch; iBunch++)
     delete fHistoSigma[iBunch];
     
   delete designSigma;
@@ -499,27 +523,35 @@ void BeamTimingData::DrawGraphSigma(int rmm){
   return;
 }
 
-void BeamTimingData::DrawGraphSep(int rmm){
+void BeamTimingData::DrawGraphSep(Int_t rmm){
 
-  TCanvas* can = new TCanvas("can_sep",Form("%s Bunch Separation", fDet.c_str()), 600, 600);
+  TCanvas* can = new TCanvas("can_sep",
+	  Form("%s Bunch Separation", fDet.c_str()), 600, 600);
   can->SetTitle("");
   
   // loop bunches
-  for(int iBunch = 0; iBunch < nBunch-1; iBunch++){
+  for(Int_t iBunch = 0; iBunch < nBunch-1; iBunch++){
     if(iBunch==0) fHistoSep[iBunch]->Draw("AP");
     else fHistoSep[iBunch]->Draw("P same");
   }
 
   // Design bunch separation line
-  TLine *designSeparation = new TLine(fHistoSep[0]->GetXaxis()->GetXmin(), bunchSeparationDesign, fHistoSep[0]->GetXaxis()->GetXmax(), bunchSeparationDesign);
-  designSeparation->SetLineColor(2); designSeparation->SetLineStyle(2); designSeparation->Draw();
+  TLine *designSeparation = new TLine(fHistoSep[0]->GetXaxis()->GetXmin(),
+	  bunchSeparationDesign, fHistoSep[0]->GetXaxis()->GetXmax(), 
+	  bunchSeparationDesign);
+
+  designSeparation->SetLineColor(2); 
+  designSeparation->SetLineStyle(2); 
+  designSeparation->Draw();
   
   // Print the title
   TText *titleboxsigma;
   if(rmm!=-999)
-    titleboxsigma = new TText(0.01,0.96, Form("%s RMM %02d Bunch Separation [ns]", fDet.c_str(), rmm)); // 0.01 0.96
+    titleboxsigma = new TText(0.01,0.96, 
+	    Form("%s RMM %02d Bunch Separation [ns]", fDet.c_str(), rmm)); // 0.01 0.96
   else
-    titleboxsigma = new TText(0.01,0.96, Form("%s Bunch Separation [ns]", fDet.c_str(), rmm)); // 0.01 0.96
+    titleboxsigma = new TText(0.01,0.96, 
+	    Form("%s Bunch Separation [ns]", fDet.c_str(), rmm)); // 0.01 0.96
 
   titleboxsigma->SetNDC();
   titleboxsigma->SetTextSize(0.055); // 0.055
@@ -531,7 +563,7 @@ void BeamTimingData::DrawGraphSep(int rmm){
     can->SaveAs(Form("%s_bunchseparation_weekly_all.png", fDet.c_str()));
   
   // clean up
-  for(int iBunch = 0; iBunch < nBunch-1; iBunch++)
+  for(Int_t iBunch = 0; iBunch < nBunch-1; iBunch++)
     delete fHistoSep[iBunch];
 
   delete designSeparation;
@@ -539,21 +571,4 @@ void BeamTimingData::DrawGraphSep(int rmm){
   delete can;
   
   return;
-}
-
-int main(int argc, char* argv[]) {
-  
-  // Process the options.
-  for (;;) {
-    int c = getopt(argc, argv, "f:");
-    if (c<0) break;
-    switch (c) {
-    case 'f': {
-      BeamTimingData run(optarg);
-      break; }
-    }
-  } // Closes process options for loop  
-  
-  return 0;
-
 }

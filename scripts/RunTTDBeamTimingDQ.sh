@@ -1,5 +1,7 @@
 #!/bin/bash
 
+### AUTHOR: MATTHEW LAWE
+
 f=$(readlink -f $0)
 . ${f%/*}/dateutils.sh
 
