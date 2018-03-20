@@ -134,41 +134,41 @@ void BeamTimingData::FillGraphs(Int_t rmm) {
 
       if(!fileHistoSigma || !fileHistoMean) continue;
       
-      for(Int_t iPoInt_t = 0; iPoInt_t < fileHistoMean->GetN(); iPoInt_t++){
+      for(Int_t iPoint = 0; iPoint < fileHistoMean->GetN(); iPoint++){
 	Double_t x,y,ey,s,es,xp,yp,eyp; // x = date/time, y = mean, ey = mean error, s = sigma, es = sigma error, xp = previous date/time, yp = previous mean, eyp = previous mean error
-	fileHistoMean->GetPoInt_t(iPoInt_t, x, y);
-	ey = fileHistoMean->GetErrorY(iPoInt_t);
-	fileHistoSigma->GetPoInt_t(iPoInt_t, x, s);
-	es = fileHistoSigma->GetErrorY(iPoInt_t);
+	fileHistoMean->GetPoint(iPoint, x, y);
+	ey = fileHistoMean->GetErrorY(iPoint);
+	fileHistoSigma->GetPoint(iPoint, x, s);
+	es = fileHistoSigma->GetErrorY(iPoint);
 	
 	if(x > 0 && y > 0){
 	  if(minTimeBunch[iBunch] < y && y < minTimeBunch[iBunch]+TimeRange) {
 	    // Bunch mean time
-	    fHistoMean[iBunch]->SetPoInt_t     (fHistoMean[iBunch]->GetN(), x, y);
-	    fHistoMean[iBunch]->SetPoInt_tError(fHistoMean[iBunch]->GetN()-1, 0, ey); // -1 because a poInt_t has just been added in previous line
+	    fHistoMean[iBunch]->SetPoint     (fHistoMean[iBunch]->GetN(), x, y);
+	    fHistoMean[iBunch]->SetPointError(fHistoMean[iBunch]->GetN()-1, 0, ey); // -1 because a poInt_t has just been added in previous line
 	    // Bunch width (sigma)
-	    fHistoSigma[iBunch]->SetPoInt_t     (fHistoSigma[iBunch]->GetN(), x, 2*s); // Bunch width is twice the sigma
-	    fHistoSigma[iBunch]->SetPoInt_tError(fHistoSigma[iBunch]->GetN()-1, 0, 2*es); // Double error too
+	    fHistoSigma[iBunch]->SetPoint     (fHistoSigma[iBunch]->GetN(), x, 2*s); // Bunch width is twice the sigma
+	    fHistoSigma[iBunch]->SetPointError(fHistoSigma[iBunch]->GetN()-1, 0, 2*es); // Double error too
 	    if(2*s < fMinSigma) fMinSigma = 2*s;
 	    if(2*s > fMaxSigma) fMaxSigma = 2*s;
 	    // Bunch separation
 	    if(iBunch){
-	      for(Int_t nPoInt_t = 0; nPoInt_t < fHistoMean[iBunch-1]->GetN(); nPoInt_t++){
-		fHistoMean[iBunch-1]->GetPoInt_t(nPoInt_t, xp, yp);
-		eyp = fHistoMean[iBunch-1]->GetErrorY(nPoInt_t);
+	      for(Int_t nPoint = 0; nPoint < fHistoMean[iBunch-1]->GetN(); nPoint++){
+		fHistoMean[iBunch-1]->GetPoint(nPoint, xp, yp);
+		eyp = fHistoMean[iBunch-1]->GetErrorY(nPoint);
 		if(xp == x) { // if x value (time) are the same, subtract previous mean from current mean
-		  fHistoSep[iBunch-1]->SetPoInt_t     (fHistoSep[iBunch-1]->GetN(), x, y-yp);
-		  fHistoSep[iBunch-1]->SetPoInt_tError(fHistoSep[iBunch-1]->GetN()-1, 0, TMath::Sqrt((ey*ey)+(eyp*eyp)) );
+		  fHistoSep[iBunch-1]->SetPoint     (fHistoSep[iBunch-1]->GetN(), x, y-yp);
+		  fHistoSep[iBunch-1]->SetPointError(fHistoSep[iBunch-1]->GetN()-1, 0, TMath::Sqrt((ey*ey)+(eyp*eyp)) );
 		  if(y-yp < fMinSep) fMinSep = y-yp;
 		  if(y-yp > fMaxSep) fMaxSep = y-yp;
 		} // if(xp==x)
-	      } // for(Int_t nPoInt_t...
+	      } // for(Int_t nPoint...
 	    } // if(iBunch)
 	  }
 	  else
 	    OutOfRange[iBunch]++;
 	} // if(x > 0 && y > 0)
-      } // for(Int_t iPoInt_t...
+      } // for(Int_t iPoint...
     } // file iterator
   } // bunches
   
