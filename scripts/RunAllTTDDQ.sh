@@ -73,4 +73,5 @@ done
 
 echo "Making Slides"
 ${f%/*}/MakeSlides.sh -w $week -a "${author}"
+${f%/*}/MakeTarBalls.sh -w $week
 #$SOFFTASKSROOT/share/tript/MakeSlides.sh -w $week -a "${author}"
