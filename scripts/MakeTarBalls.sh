@@ -8,13 +8,6 @@
 # EMAIL: hoganman@rams.colostate.edu
 ####################################################################
 
-TAR=$(which tar)
-TARCREATE="$TAR cvf"
-TAROPTIONS="--null -T -"
-
-FIND=$(which find)
-ONEPERLINE="-print0"
-
 f=$(readlink -f $0)
 . ${f%/*}/dateutils.sh
 
@@ -50,26 +43,20 @@ done
 
 date_dir=$(dateDir $week)
 
+OLDDIR=$CURDIR
+OUTDIR=$CURDIR/RunPeriods/$date_dir
+cd $OUTDIR
 # create tarballs for each detector
 for det in ECAL P0D SMRD; do
 
-    # define options and outputs
-    SEARCHDIR=$CURDIR/RunPeriods/$date_dir
-    DETROOTFILES="-type f -iname \"*${det}*root\""
-    OUTDIR=$SEARCHDIR
-    TARBALL=$OUTDIR/${det}DQ.tar
-
-    # find & tar commands
-    FINDFILES="$FIND $SEARCHDIR $DETROOTFILES $ONEPERLINE"
-    MAKETARBALL="$TARCREATE $TARBALL $TAROPTIONS"
-
-    # pipe together
-    $FINDFILES | $MAKETARBALL
+    find . -type f -iname "*${det}*root" -print0 | tar -cvf ${det}DQ.tar --null -T -
 
 done
+cd $OLDIDR
 
 echo "DONE making tarballs for DQ experts."
 echo "Submit the following: "
 for det in ECAL P0D SMRD; do
     echo "$CURDIR/RunPeriods/$date_dir/${det}DQ.tar to the $det DQ expert"
 done
+echo "To the DQ experts!"
