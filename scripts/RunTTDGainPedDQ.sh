@@ -37,7 +37,7 @@ while [ "$1" != "" ] ; do
             first="$2"
             shift;;
         -r|--ref-run)
-            refrun="$(printf '%08i' $2)"
+            refrun="$2"
             shift;;
         ecal|smrd|p0d)
             det=$1
@@ -104,7 +104,7 @@ if [[ ! -z $refrun ]]; then
     echo "Retrieving reference file"
     mkdir -p ref
 
-    refname="$(printf 'nd280_%08i' $i)"
+    refname="$(printf 'nd280_%08i' $refrun)"
     if [ -d "ref/${refname}" ]; then
 	echo "Directory Gain/Files/ref/${refname} already exists, you must have downloaded these files already, perhaps when doing the DQ for another detector."
         echo "If you wish to download the files again, completely remove the directory ${refname} from $PWD/ref."
