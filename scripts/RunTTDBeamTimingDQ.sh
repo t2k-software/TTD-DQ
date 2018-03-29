@@ -75,6 +75,6 @@ ls -1 $PWD/Files/dq-${det}-b-v00/${det}-b_*.root > $CURDIR/RunPeriods/$date_data
 # Beam Timing
 cd $CURDIR/RunPeriods/$date_data_dir/BeamTiming/$det
 echo "Processing beam timing files"
-$CURDIR/macros/BeamTimingData.exe -f files.list > beamtiming.out
+$CURDIR/BeamTiming.exe -f files.list > beamtiming.out
 
 echo "DONE."
