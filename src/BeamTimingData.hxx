@@ -21,6 +21,11 @@ static const Int_t nRMM_P0D  = 6;
 static const Int_t nRMM_SMRD = 4;
 static const Int_t bunchSeparationDesign = 581; // Design Bunch Separation 581 ns
 static const Int_t bunchWidthDesign = 58; // Design Bunch Width 58 ns
+static const Int_t minBunchSigma = 30;
+static const Int_t maxBunchSigma = 120;
+static const Int_t minBunchSep = 520;
+static const Int_t maxBunchSep = 650;
+
 
 inline bool exists_file(const std::string& name){
   struct stat buffer;
@@ -54,7 +59,9 @@ private:
   std::string fDet; // Detector
   Int_t fnRMMs; // Number of RMMs
 
-  Int_t OutOfRange[nBunch]; // Number of out of range data fits
+  Int_t OutOfRangeMean[nBunch]; // Number of out of range data fits to extract mean;
+  Int_t OutOfRangeSigma; // Number of out of range Sigma values;
+  Int_t OutOfRangeSep; // Number of out of range Separation values;
   
   std::vector<TFile*> fRootFiles; // Files read
 
