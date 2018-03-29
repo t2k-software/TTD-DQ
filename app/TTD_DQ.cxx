@@ -71,23 +71,24 @@ int main(int argc, char* argv[]) {
   for (;;) {
     int c = getopt(argc, argv, "hw:");
     switch (c) {
-      case 'h':
+    case 'h':
       {
         Usage();
-	    break;
+	break;
       }
-      case 'w':
+    case 'w':
       {
         std::istringstream in(optarg);
         in >> weeksAgo;
         break;
       }
-      default :
+    default :
       {
 	TestEnvVariables();
 	RunScripts(weeksAgo);
+	return 0;
       }
-	  break;
+      break;
     }
   }
   // Closes process options for loop
