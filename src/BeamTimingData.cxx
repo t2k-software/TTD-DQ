@@ -144,34 +144,34 @@ void BeamTimingData::FillGraphs(Int_t rmm) {
 	  if(minTimeBunch[iBunch] < y && y < minTimeBunch[iBunch]+TimeRange) {
 	    fHistoMean[iBunch]->SetPoint     (fHistoMean[iBunch]->GetN(), x, y);
 	    fHistoMean[iBunch]->SetPointError(fHistoMean[iBunch]->GetN()-1, 0, ey); // -1 because a point has just been added in previous line
+	  
+	    // Bunch width (sigma)
+	    if(minBunchSigma < s && s < maxBunchSigma) {
+	      fHistoSigma[iBunch]->SetPoint     (fHistoSigma[iBunch]->GetN(), x, 2*s); // Bunch width is twice the sigma
+	      fHistoSigma[iBunch]->SetPointError(fHistoSigma[iBunch]->GetN()-1, 0, 2*es); // Double error too
+	    }
+	    else
+	      OutOfRangeSigma++;
+	  
+	    // Bunch separation
+	    if(iBunch){
+	      for(Int_t nPoint = 0; nPoint < fHistoMean[iBunch-1]->GetN(); nPoint++){
+		fHistoMean[iBunch-1]->GetPoint(nPoint, xp, yp);
+		eyp = fHistoMean[iBunch-1]->GetErrorY(nPoint);
+		if(xp == x) { // if x value (time) are the same, subtract previous mean from current mean
+		  if(minBunchSep < y-yp && y-yp < maxBunchSep) {
+		    fHistoSep[iBunch-1]->SetPoint     (fHistoSep[iBunch-1]->GetN(), x, y-yp);
+		    fHistoSep[iBunch-1]->SetPointError(fHistoSep[iBunch-1]->GetN()-1, 0, TMath::Sqrt((ey*ey)+(eyp*eyp)) );
+		  }
+		  else
+		    OutOfRangeSep++;
+		} // if(xp==x)
+	      } // for(Int_t nPoint...
+	    } // if(iBunch)
 	  }
 	  else
 	    OutOfRangeMean[iBunch]++;
 	  
-	  // Bunch width (sigma)
-	  if(minBunchSigma < s && s < maxBunchSigma) {
-	    fHistoSigma[iBunch]->SetPoint     (fHistoSigma[iBunch]->GetN(), x, 2*s); // Bunch width is twice the sigma
-	    fHistoSigma[iBunch]->SetPointError(fHistoSigma[iBunch]->GetN()-1, 0, 2*es); // Double error too
-	  }
-	  else
-	    OutOfRangeSigma++;
-	  
-	  // Bunch separation
-	  if(iBunch){
-	    for(Int_t nPoint = 0; nPoint < fHistoMean[iBunch-1]->GetN(); nPoint++){
-	      fHistoMean[iBunch-1]->GetPoint(nPoint, xp, yp);
-	      eyp = fHistoMean[iBunch-1]->GetErrorY(nPoint);
-	      if(xp == x) { // if x value (time) are the same, subtract previous mean from current mean
-		if(minBunchSep < y-yp && y-yp < maxBunchSep) {
-		  fHistoSep[iBunch-1]->SetPoint     (fHistoSep[iBunch-1]->GetN(), x, y-yp);
-		  fHistoSep[iBunch-1]->SetPointError(fHistoSep[iBunch-1]->GetN()-1, 0, TMath::Sqrt((ey*ey)+(eyp*eyp)) );
-		}
-		else
-		  OutOfRangeSep++;
-	      } // if(xp==x)
-	    } // for(Int_t nPoint...
-	  } // if(iBunch)
-
 	} // if(x > 0 && y > 0)
       } // for(Int_t iPoint...
     } // file iterator
