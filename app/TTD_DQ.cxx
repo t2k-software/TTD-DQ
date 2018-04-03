@@ -11,7 +11,7 @@
 const TString SUPPORTED_SOFFTASKS_VERSION = "v1r51";
 void Usage();
 void MustHaveSet(std::string envVar);
-void MustHave(TString program, std::string searchPath = "PATH");
+void MustHave(TString program, std::string searchPath);
 void TestEnvVariables();
 void RunScripts(const Int_t &weeksAgo);
 
@@ -31,20 +31,25 @@ void Usage()
 
 void MustHaveSet(TString envVar)
 {
-   if(!gSystem->Getenv(envVar.Data()))
-   {
-       std::cout << "ERROR: " << envVar.Data() << " is not set!" << std::endl;
-       Usage();
-   }
+    std::cout << "Must have " << envVar.Data() << " set...";
+    if(!gSystem->Getenv(envVar.Data()))
+    {
+        std::cout << "ERROR: " << envVar.Data() << " is not set!" << std::endl;
+        Usage();
+    }
+    std::cout << "GOOD" << std::endl;
 }
 
 void MustHave(TString program, std::string searchPath)
 {
-  if(!gSystem->FindFile(searchPath.c_str(), program))
-  {
-       std::cout << "ERROR: " << program.Data() << " NOT found in " << searchPath << std::endl;
-       exit(1);
-  }
+    TString copy = program;
+    std::cout << "Must have " << program.Data() << "...";
+    if(!gSystem->FindFile(gSystem->Getenv(searchPath.c_str()), program))
+    {
+         std::cout << "ERROR: " << copy.Data() << " NOT found in " << searchPath << std::endl;
+         exit(1);
+    }
+    std::cout << "GOOD" << std::endl;
 }
 
 void Check_soffTasks_Version()
@@ -67,12 +72,13 @@ void TestEnvVariables()
     TString ROOTSYS = "ROOTSYS";
     TString SOFFTASKSROOT = "SOFFTASKSROOT";
     TString pdflatex = "pdflatex";
+    std::string PATH = "PATH";
 
     MustHaveSet(CMTROOT);
     MustHaveSet(ROOTSYS);
     MustHaveSet(SOFFTASKSROOT);
-    MustHave(iget);
-    MustHave(pdflatex);
+    MustHave(iget, PATH);
+    MustHave(pdflatex, PATH);
     Check_soffTasks_Version();
 }
 
