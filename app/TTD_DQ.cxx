@@ -8,9 +8,10 @@
 #include <iostream>
 #include <cstdlib>
 
+const TString SUPPORTED_SOFFTASKS_VERSION = "v1r51";
 void Usage();
-void MustHave(std::string envVar);
-void MustHave(const char* searchPath, TString program);
+void MustHaveSet(std::string envVar);
+void MustHave(TString program, std::string searchPath = "PATH");
 void TestEnvVariables();
 void RunScripts(const Int_t &weeksAgo);
 
@@ -24,35 +25,55 @@ void Usage()
     std::cout << "The following environment variables must be set" << std::endl;
     std::cout << "CMTROOT, ROOTSYS, and SOFFTASKSROOT " << std::endl;
     std::cout << "  with iget and pdflatex must be in your PATH!" << std::endl;
+    std::cout << "The supported version of soffTasks is " << SUPPORTED_SOFFTASKS_VERSION.Data() << std::endl;
     exit(1);
 }
 
-void MustHave(std::string envVar)
+void MustHaveSet(TString envVar)
 {
-   if(!gSystem->Getenv(envVar.c_str()))
+   if(!gSystem->Getenv(envVar.Data()))
    {
-       std::cout << "ERROR: " << envVar.c_str() << " is not set!" << std::endl;
+       std::cout << "ERROR: " << envVar.Data() << " is not set!" << std::endl;
        Usage();
    }
 }
 
-void MustHave(const char* searchPath, TString program)
+void MustHave(TString program, std::string searchPath)
 {
-  if(!gSystem->FindFile(searchPath, program))
+  if(!gSystem->FindFile(searchPath.c_str(), program))
   {
        std::cout << "ERROR: " << program.Data() << " NOT found in " << searchPath << std::endl;
        exit(1);
   }
 }
 
+void Check_soffTasks_Version()
+{
+    const TString sofftasksroot = gSystem->Getenv("SOFFTASKSROOT");
+    if (!sofftasksroot.Contains(SUPPORTED_SOFFTASKS_VERSION) || !sofftasksroot.Contains(Form("%sp0", SUPPORTED_SOFFTASKS_VERSION.Data())))
+    {
+        TString current_soffTasks_ver = "";
+        //get the current softTasks version string
+        for (int i =sofftasksroot.Last('/')+1; i < sofftasksroot.Length(); i++)
+            current_soffTasks_ver.Append(sofftasksroot[i]);
+        std::cout << Form("WARNING: soffTasks %s does NOT match version supported version %s", current_soffTasks_ver.Data(), SUPPORTED_SOFFTASKS_VERSION.Data()) << std::endl;
+    }
+}
+
 void TestEnvVariables()
 {
-    const std::string PATH = gSystem->Getenv("PATH");
-    MustHave(PATH.c_str(), "pdflatex");
-    MustHave(PATH.c_str(), "iget");
-    MustHave("CMTROOT");
-    MustHave("ROOTSYS");
-    MustHave("SOFFTASKSROOT");
+    TString iget = "iget";
+    TString CMTROOT = "CMTROOT";
+    TString ROOTSYS = "ROOTSYS";
+    TString SOFFTASKSROOT = "SOFFTASKSROOT";
+    TString pdflatex = "pdflatex";
+
+    MustHaveSet(CMTROOT);
+    MustHaveSet(ROOTSYS);
+    MustHaveSet(SOFFTASKSROOT);
+    MustHave(iget);
+    MustHave(pdflatex);
+    Check_soffTasks_Version();
 }
 
 void RunScripts(const Int_t& weeksAgo)

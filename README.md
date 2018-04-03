@@ -26,7 +26,7 @@ cd TTD-DQ
 make
 ```
 
-### Running the Package
+### Running the Package And Making the DQ Report
 ```bash
 ./TTD_DQ.exe
 ```
@@ -67,9 +67,10 @@ The first thing you need to do is ensure you are on the nd280-dataquality@mailma
 
 ### Generating the Report
 
-After compiling the executing TTD_DQ.exe, the script will automatically download the latest set of DQ files.
+After compiling the executing TTD_DQ.exe, the script will automatically download the latest set of DQ files and process them into a PDF LaTeX document.
 
-~~
+__If you wish to run the scripts manually, please loop up the following__
+
 Once the processing has completed you can begin to generate the TTD DQ report. First you need to find out the following information:
  * __Run Period__ : This is the dates of the week for which you are doing the processing, in the form MMDD-MMDD. Here the first date is Sunday at the start of the previous week, and the second date is the following Saturday.
  * __Year__ : Self explanatory I hope!
@@ -78,7 +79,6 @@ Once the processing has completed you can begin to generate the TTD DQ report. F
  * __Reference Gain File (for each TripT Detector)__ : The 5 digit ND280 run number that was taken shortly after the HV Trims for each TripT detector were taken. The run needs to have been written to disc and lasted a while to have collected sufficient statistics to do the comparison against. The reference files can be (and probably will be) different for each TripT detector. To find the relevant files you'll probably need to cross reference the Run Control elog against the Subsystem elogs (ECal, P0D, SMRD). If the HV Trims haven't changed within the past week then the reference files will not have changed since the previous processing.
 
 It is then possible to proceed with creating the TTD DQ report. Navigate to the scripts directory within the TTD DQ software and execute the script ./RunAllTTDDQ.sh. You will be promoted to input relevant information on the command line, and the script will proceed to download the relevant files and run the data processing. Watch the terminal for obvious errors thrown by the processing.
-~~
 
 All being well a pdf containing the slides will be produced and its location will be written to the terminal; it will be of the form
 
@@ -100,7 +100,7 @@ In your email you should also include any information relevant to the DQ for the
 The DQ experts for each sub-detector are currently:
 
 * __ECal__ : __Stephane Zsoldos__ (s.zsoldos@qmul.ac.uk)
-* __P0D__ : ~~__Jackie Schwehr__ (jackie.schwehr@colostate.edu)~~ __Hang Su__ (has137@pitt.edu)
+* __P0D__ : __Hang Su__ (has137@pitt.edu)
 * __SMRD__ : __Nikolai Yershov__ (yershov@inr.ru) and __Kamil Porwit__ (kporwit@us.edu.pl)
 
 ## Detailed Checks
