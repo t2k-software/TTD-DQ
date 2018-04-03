@@ -55,7 +55,7 @@ void MustHave(TString program, std::string searchPath)
 void Check_soffTasks_Version()
 {
     const TString sofftasksroot = gSystem->Getenv("SOFFTASKSROOT");
-    if (!sofftasksroot.Contains(SUPPORTED_SOFFTASKS_VERSION) || !sofftasksroot.Contains(Form("%sp0", SUPPORTED_SOFFTASKS_VERSION.Data())))
+    if (!sofftasksroot.Contains(SUPPORTED_SOFFTASKS_VERSION)) 
     {
         TString current_soffTasks_ver = "";
         //get the current softTasks version string
