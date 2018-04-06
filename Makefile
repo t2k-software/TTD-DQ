@@ -1,9 +1,9 @@
 #!/usr/bin/env make
-# MAKEFILE 
+# MAKEFILE
 #
 # __AUTHOR__: MATTHEW HOGAN
 # __EMAIL__: hoganman@gmail.com
-# 
+#
 # __Behavior__
 # * make          : compiles BeamTiming.exe and TTD_DQ.exe
 # * make     clean: removes .o files
@@ -16,7 +16,7 @@ APP    := $(TTDDQ)/app
 VPATH  := $(TTDDQ):$(MACROS):$(SRC):$(APP)
 
 ROOTCONFIG := $(shell which root-config)
-CXX         = $(shell which g++)
+CXX         = $(shell which $(shell $(ROOTCONFIG) --cxx))
 
 CFLAGS   := $(shell $(ROOTCONFIG) --cflags)
 CXXFLAGS := $(CFLAGS)
@@ -24,10 +24,10 @@ CXXFLAGS := $(CFLAGS)
 LIBS     := $(shell $(ROOTCONFIG) --glibs)
 INC      := -I$(SRC)
 
-OBS  := BeamTimingData.o 
+OBS  := BeamTimingData.o
 EXE  := BeamTiming.exe TTD_DQ.exe
 
-.PHONY: all clean 
+.PHONY: all clean
 all: $(OBS) $(EXE)
 
 # compile .o objects
