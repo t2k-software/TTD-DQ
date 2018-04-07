@@ -20,6 +20,7 @@ CXX         = $(shell which $(shell $(ROOTCONFIG) --cxx))
 
 CFLAGS   := $(shell $(ROOTCONFIG) --cflags)
 CXXFLAGS := $(CFLAGS)
+CXX      := $(CXX) $(CXXFLAGS)
 
 LIBS     := $(shell $(ROOTCONFIG) --glibs)
 INC      := -I$(SRC)
@@ -33,7 +34,7 @@ all: $(OBS) $(EXE)
 # compile .o objects
 #############################################
 %.o: %.cxx
-	$(CXX) $(CXXFLAGS) $(INC) -c $<
+	$(CXX) $(INC) -c $<
 #############################################
 
 # BeamTiming executible
