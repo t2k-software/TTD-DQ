@@ -42,10 +42,10 @@ if [ "$author" = "" ] ; then
 fi
 
 
-# Download the subrun database to ~/.data/
+# Download the subrun database to $HOME/.data/
 dbfile="nd280_subrun_info.sqlite"
-[ ! -d ~/.data ] && mkdir ~/.data
-curl -o ~/.data/$dbfile http://repo.nd280.org/nd280files/nd280DQ/$dbfile
+[ ! -d $HOME/.data ] && mkdir $HOME/.data
+curl -o $HOME/.data/$dbfile http://repo.nd280.org/nd280files/nd280DQ/$dbfile
 
 # Get the first and last runs of the week from the subrun database
 
