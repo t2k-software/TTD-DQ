@@ -146,7 +146,7 @@ void BeamTimingData::FillGraphs(Int_t rmm) {
 	    fHistoMean[iBunch]->SetPointError(fHistoMean[iBunch]->GetN()-1, 0, ey); // -1 because a point has just been added in previous line
 	  
 	    // Bunch width (sigma)
-	    if(minBunchSigma < s && s < maxBunchSigma) {
+	    if(minBunchSigma < 2*s && 2*s < maxBunchSigma) {
 	      fHistoSigma[iBunch]->SetPoint     (fHistoSigma[iBunch]->GetN(), x, 2*s); // Bunch width is twice the sigma
 	      fHistoSigma[iBunch]->SetPointError(fHistoSigma[iBunch]->GetN()-1, 0, 2*es); // Double error too
 	    }
