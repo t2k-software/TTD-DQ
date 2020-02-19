@@ -102,14 +102,12 @@ void BeamTimingData::FillGraphs(Int_t rmm) {
       std::cout << "!!MeanHistogram does not exist!!" << std::endl;
       std::cout << "Bunch: " << iBunch+1 << std::endl;
       std::cout << "Tried:" << NameMean << std::endl;
-      throw 1;
-    }
+  }
 
     if(keySigma == NULL){
       std::cout << "!!SigmaHistogram does not exist!!" << std::endl;
       std::cout << "Bunch:" << iBunch+1 << std::endl;
       std::cout << "Tried: " << NameSigma << std::endl;
-      throw 1;
     }
     
     // Loop over input files
